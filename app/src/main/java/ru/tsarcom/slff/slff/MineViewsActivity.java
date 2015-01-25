@@ -5,10 +5,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,6 +35,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,6 +126,58 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 
         String fileName = intent.getStringExtra(FILE_NAME);
         activity = this;
+
+
+//        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "savedBitmap3.jpg");
+        File file = new File(getCacheDir(), "savedBitmap3.jpg");
+
+//        Bitmap bitmap;
+        Paint paint;
+        String url ="http://95.78.234.20:81/atest/uploads/3/114/83/img.jpg";
+//        bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.RGB_565);
+        MemoryCache memoryCache=new MemoryCache();
+        Bitmap bitmap=memoryCache.get(url);
+//        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+//        paint.setTextSize(40);
+//
+//        Bitmap bmpIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+//        bmpIcon = Bitmap.createScaledBitmap(bmpIcon, 500, 500, true);
+//
+//        bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.RGB_565);
+//        Canvas canvas = new Canvas(bitmap);
+//        canvas.drawColor(Color.WHITE);
+//        canvas.drawBitmap(bmpIcon, 0,0, paint);
+//        canvas.drawText("Saved bitmap", 100, 50, paint);
+
+//        try {
+//            // отрываем поток для записи
+//            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+//                    openFileOutput("FILENAME", MODE_PRIVATE)));
+//            // пишем данные
+//            bw.write("Содержимое файла");
+//            // закрываем поток
+//            bw.close();
+////            Log.d(LOG_TAG, "Файл записан");
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        try {
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            } finally {
+                if (fos != null){
+                    Toast.makeText(getBaseContext(), "файл сохранён ", Toast.LENGTH_LONG).show();
+                    fos.close();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
 //        // открываем подключение к БД
         db_MC = new DB_MineCompare(this);
@@ -264,22 +327,12 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                          Toast.makeText(getBaseContext(), "Для начала нажмите 'Создать' ", Toast.LENGTH_LONG).show();
                     }else{
                         String strCompareLen = iCompareLen.toString();
-//                        Toast.makeText(getBaseContext(), "strCompareLen = " + strCompareLen, Toast.LENGTH_LONG).show();
-
                         // массивы данных
                         int img = R.drawable.ic_launcher;
                         // Image url
                         String image_url = "http://api.androidhive.info/images/sample.jpg";
 
-                        // ImageLoaderSmall class instance
-//                        ImageLoaderSmall imgLoader = new ImageLoaderSmall(getApplicationContext());
-
-
                         loader = R.drawable.ic_launcher;
-
-//                        imagetest.setImageBitmap(imgLoader.getBitmap(image_url));
-                        // упаковываем данные в понятную для адаптера структуру
-//                        bm = imgLoader.getBitmap(image_url);
                         data4list = new ArrayList<Map<String, Object>>(
                                 iCompareLen);
                         Map<String, Object> m;
@@ -294,35 +347,16 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                             String pathLeft = joPhotoLeft.getString("path");
                             int orientationLeft =  joPhotoLeft.getInt("Orientation");
                             int all_voiteLeft = joPhotoLeft.getInt("all_voite");
-    //                        Toast.makeText(getBaseContext(), "pathLeft "+pathLeft, Toast.LENGTH_LONG).show();
                             JSONObject joPhotoRight = jaPhoto.getJSONObject(1);
                             String pathRight = joPhotoRight.getString("path");
                             int orientationRight = joPhotoRight.getInt("Orientation");
                             int all_voiteRight = joPhotoRight.getInt("all_voite");
     //                        Toast.makeText(getBaseContext(), "pathRight "+pathRight, Toast.LENGTH_LONG).show();
 
-                db_MC.addRecMC(id, date_crt, all_voiteLeft ,all_voiteRight ,R.drawable.plus_left, R.drawable.ic_launcher, orientationLeft, orientationRight, 0);
+                            db_MC.addRecMC(id, date_crt, all_voiteLeft ,all_voiteRight ,
+                                    R.drawable.plus_left, R.drawable.ic_launcher, orientationLeft, orientationRight, 0);
 
                         }
-
-//                        // массив имен атрибутов, из которых будут читаться данные
-//                        String[] from = {ATTRIBUTE_COMPARE_ID,
-//                                ATTRIBUTE_NAME_DATE_CRT,
-//    //                ATTRIBUTE_NAME_CHECKED,
-//                                ATTRIBUTE_NAME_LEFT, ATTRIBUTE_NAME_RIGHT,ATTRIBUTE_VOITE_LEFT,ATTRIBUTE_VOITE_RIGHT, ATTRIBUTE_NAME_PB,
-//                                ATTRIBUTE_ORNT_LEFT,ATTRIBUTE_ORNT_RIGHT};
-//                        // массив ID View-компонентов, в которые будут вставлять данные
-//                        int[] to = {R.id.tvCid, R.id.tvCdate, R.id.ivLeft, R.id.ivRight, R.id.tvVoiteLeft, R.id.tvVoiteRight, R.id.pbLoad,};
-//
-//                        // создаем адаптер
-//                        sAdapter = new MySimpleAdapter(activity, data4list, R.layout.mine_list_view,
-//                                from, to);
-//
-//                        // Указываем адаптеру свой биндер
-//                        sAdapter.setViewBinder(new MyViewBinder());
-//                        // к списоку присваиваем ему адаптер
-//                        lvSimple.setAdapter(sAdapter);
-
                     }
 
                 }else{
@@ -421,8 +455,6 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         }
 
     }
-
-
 
     //----
     private class CreateCompareHttpAsyncTask extends AsyncTask<String, Void, String> {
@@ -625,6 +657,8 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
             String cdate = c.getString(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_DATE_CRT));
             int cVoiteLeft = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_LEFT));
             int cVoiteRight = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_RIGHT));
+            int imgLeft = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_LEFT));
+            int imgRight = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_RIGHT));
 
             TextView tvCid = (TextView) v.findViewById(R.id.tvCid);
             TextView tvCdate = (TextView) v.findViewById(R.id.tvCdate);
@@ -633,9 +667,14 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
             TextView tvVoiteLeft = (TextView) v.findViewById(R.id.tvVoiteLeft);
             TextView tvVoiteRight = (TextView) v.findViewById(R.id.tvVoiteRight);
             ProgressBar pbLoad = (ProgressBar) v.findViewById(R.id.pbLoad);
-
+//            Bitmap btm;
+//            btm = (Bitmap) imgLeft;
             tvCid.setText(cid);
             tvCdate.setText(cdate);
+//            ivLeft.setImageResource(0x7f020037);
+//            ivLeft.setImageResource(imgLeft);
+//            ivLeft.setImageBitmap(btm);
+//            ivRight.setImageBitmap(imgRight);
             tvVoiteLeft.setText(""+cVoiteLeft);
             tvVoiteRight.setText(""+cVoiteRight);
 
