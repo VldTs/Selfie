@@ -442,10 +442,6 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 } catch(NumberFormatException nfe) {
                     System.out.println("Could not parse " + imgOrientation_right);
                 }
-//            Toast.makeText(getBaseContext(), "imgOrientation_left = "+imgOrientation_left,
-//                    Toast.LENGTH_SHORT).show();
-//            Toast.makeText(getBaseContext(), "imgOrientation_right = "+imgOrientation_right,
-//                    Toast.LENGTH_SHORT).show();
                 int iall_voiteLeft = 1;
                 try {
                     iall_voiteLeft = Integer.parseInt(all_voiteLeft);
@@ -468,12 +464,6 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 //                pbLoad.setProgress(5);
 
                 int img = R.drawable.abc_ic_clear_mtrl_alpha;
-//                if (url_left.equals("empty")) {
-//                    url_left = "empty.png";
-//                }
-//                if (url_right.equals("empty")) {
-//                    url_right = "empty.png";
-//                }
                 ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_left, img, ivLeft, imgOrientation_left_i);
                 ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_right, img, ivRight, imgOrientation_right_i);
                 return vi;
@@ -495,47 +485,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 return view;
             }
         }
-        /*
-        class MySimpleAdapter2 extends SimpleAdapter {
 
-            ArrayList<MineCompare> objects;
-            private Context mContext;
-            public ImageLoader imageLoader;
-            public LayoutInflater inflater=null;
-            public MySimpleAdapter2(Context context,
-                                    ArrayList<MineCompare> MineCompares, int resource,
-                                   String[] from, int[] to) {
-                super(context, objects, resource, from, to);
-                mContext = context;
-                inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                imageLoader=new ImageLoader(mContext.getApplicationContext());
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-//                View vi=convertView;
-//                if(convertView==null)
-//                    vi = inflater.inflate(R.layout.mine_list_view, null);
-//
-//                HashMap<String, Object> data = (HashMap<String, Object>) getItem(position);
-//                TextView tvCid = (TextView)vi.findViewById(R.id.tvCid);
-//                TextView tvCdate = (TextView)vi.findViewById(R.id.tvCdate);
-//                ImageView ivLeft=(ImageView)vi.findViewById(R.id.ivLeft);
-//                ImageView ivRight=(ImageView)vi.findViewById(R.id.ivRight);
-//                String strCid = (String) data.get(ATTRIBUTE_COMPARE_ID);
-//                String strCdate = (String) data.get(ATTRIBUTE_NAME_DATE_CRT);
-//                String url_left = (String) data.get(ATTRIBUTE_NAME_LEFT);
-//                String url_right = (String) data.get(ATTRIBUTE_NAME_RIGHT);
-//                tvCid.setText(strCid);
-//                tvCdate.setText(strCdate);
-//
-//                int img = R.drawable.abc_ic_clear_normal;
-//                imageLoader.DisplayImage(url_left, img, ivLeft);
-//                imageLoader.DisplayImage(url_right, img, ivRight);
-//                return vi;
-            }
-        }
-        */
     }
 
 
