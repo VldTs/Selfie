@@ -115,13 +115,18 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 
         String fileName = intent.getStringExtra(FILE_NAME);
         activity = this;
+
+//        // открываем подключение к БД
+        db_MC = new DB_MineCompare(this);
+        db_MC.open();
+        String max_id = db_MC.getLastIdMC();
+
+        Toast.makeText(getBaseContext(), "max_id = "+max_id, Toast.LENGTH_LONG).show();
         if(isConnected()) {
-
             String url0;
-            url0 = "http://95.78.234.20:81/atest/jsonMine.php?id_account="+id_account;
-//            new HttpAsyncTask().execute(url0);
+            url0 = "http://95.78.234.20:81/atest/jsonMine.php?id_account="+id_account+"&max_mcid="+max_id;
+            new HttpAsyncTask().execute(url0);
         }else{
-
                    Toast.makeText(getBaseContext(), "Нет Соединения с интернетом :(", Toast.LENGTH_LONG).show();
         }
 
@@ -152,22 +157,24 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
             }
         });
 
-//        // открываем подключение к БД
-        db_MC = new DB_MineCompare(this);
-        db_MC.open();
 
         // формируем столбцы сопоставления
 
-//        String[] from = new String[] { DB_MineCompare.C_MC_CID,DB_MineCompare.C_MC_PHOTO_LEFT ,DB_MineCompare.C_MC_PHOTO_RIGHT, DB_MineCompare.C_MC_DATE_CRT };
-//        int[] to = new int[] { R.id.tvCid, R.id.ivLeft,R.id.ivRight, R.id.tvCdate };
-//
-//        // создааем адаптер и настраиваем список
-//        scAdapter = new MySimpleCursorAdapter(this, R.layout.item_test, null, from, to, 0);
-//        lvSimple.setAdapter(scAdapter);
-////
-////
-////        // создаем лоадер для чтения данных
-//        getSupportLoaderManager().initLoader(0, null, this);
+        String[] from = new String[] { DB_MineCompare.C_MC_CID, DB_MineCompare.C_MC_DATE_CRT,
+                DB_MineCompare.C_MC_PHOTO_LEFT,  DB_MineCompare.C_MC_PHOTO_RIGHT,
+                DB_MineCompare.C_MC_VOITE_LEFT,  DB_MineCompare.C_MC_VOITE_RIGHT,
+//                DB_MineCompare.C_MC_ORNT_LEFT,  DB_MineCompare.C_MC_ORNT_RIGHT
+        };
+        int[] to = new int[] { R.id.tvCid, R.id.tvCdate, R.id.ivLeft,R.id.ivRight,
+                R.id.tvVoiteLeft, R.id.tvVoiteRight,
+//                R.id.tvVoiteLeft, R.id.tvVoiteLeft
+        };
+
+        // создааем адаптер и настраиваем список
+        scAdapter = new MySimpleCursorAdapter(this, R.layout.mine_list_view_cursor, null, from, to, 0);
+        lvSimple.setAdapter(scAdapter);
+        // создаем лоадер для чтения данных
+        getSupportLoaderManager().initLoader(0, null, this);
 
 
     }
@@ -181,10 +188,6 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
             return false;
     }
     class MyViewBinder implements SimpleAdapter.ViewBinder {
-
-//        int red = getResources().getColor(R.color.Red);
-//        int orange = getResources().getColor(R.color.Orange);
-//        int green = getResources().getColor(R.color.Green);
 
         @Override
         public boolean setViewValue(View view, Object data,
@@ -212,7 +215,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 break;
             case R.id.btnCreate:
                 // кнопка
-
+//                db_MC.addRecMC(999, "9999-02-25 ", 1 ,1 ,R.drawable.plus_left, R.drawable.ic_launcher, 0, 0, 0);
                 createActivityClass = CreateActivity.class;
 
                 if(isConnected()) {
@@ -224,10 +227,6 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                     Toast.makeText(getBaseContext(), "Нет Соединения с интернетом :(", Toast.LENGTH_LONG).show();
                 }
                 break;
-//            case R.id.btnSertviceStart:
-//                // кнопка
-//                startService(new Intent(this, SelfieServiceF.class).putExtra("id_account", id_account));
-//                break;
         }
     }
 
@@ -286,66 +285,44 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                         Map<String, Object> m;
                         for (int iC = 0; iC < iCompareLen; iC = iC + 1) {
                             JSONObject joCompare = jaCompare.getJSONObject(iC);
-                            String id = joCompare.getString("id");
+                            int id = joCompare.getInt("id");
                             String date_crt = joCompare.getString("date_crt");
 
                             jaPhoto = joCompare.getJSONArray("photo");
+
                             JSONObject joPhotoLeft = jaPhoto.getJSONObject(0);
                             String pathLeft = joPhotoLeft.getString("path");
-                            String orientationLeft =  joPhotoLeft.getString("Orientation");
-                            String all_voiteLeft = joPhotoLeft.getString("all_voite");
+                            int orientationLeft =  joPhotoLeft.getInt("Orientation");
+                            int all_voiteLeft = joPhotoLeft.getInt("all_voite");
     //                        Toast.makeText(getBaseContext(), "pathLeft "+pathLeft, Toast.LENGTH_LONG).show();
                             JSONObject joPhotoRight = jaPhoto.getJSONObject(1);
                             String pathRight = joPhotoRight.getString("path");
-                            String orientationRight = joPhotoRight.getString("Orientation");
-                            String all_voiteRight = joPhotoRight.getString("all_voite");
+                            int orientationRight = joPhotoRight.getInt("Orientation");
+                            int all_voiteRight = joPhotoRight.getInt("all_voite");
     //                        Toast.makeText(getBaseContext(), "pathRight "+pathRight, Toast.LENGTH_LONG).show();
 
-                            m = new HashMap<String, Object>();
-                            m.put(ATTRIBUTE_COMPARE_ID, id);
-                            m.put(ATTRIBUTE_NAME_DATE_CRT, date_crt);
-//                            ImageLoaderSmall imgLoader2 = new ImageLoaderSmall(getApplicationContext());
-//                            m.put(ATTRIBUTE_NAME_LEFT, imgLoader.getBitmap(image_url));
-                            m.put(ATTRIBUTE_VOITE_LEFT, all_voiteLeft);
-                            m.put(ATTRIBUTE_VOITE_RIGHT, all_voiteRight);
-                            m.put(ATTRIBUTE_NAME_LEFT, pathLeft);
-    //                        m.put(ATTRIBUTE_NAME_LEFT, bm);
-                            m.put(ATTRIBUTE_NAME_RIGHT, pathRight);
-                            m.put(ATTRIBUTE_NAME_PB, 2);
-                            m.put(ATTRIBUTE_ORNT_LEFT, orientationLeft);
-                            m.put(ATTRIBUTE_ORNT_RIGHT, orientationRight);
-                            data4list.add(m);
+                db_MC.addRecMC(id, date_crt, all_voiteLeft ,all_voiteRight ,R.drawable.plus_left, R.drawable.ic_launcher, orientationLeft, orientationRight, 0);
+
                         }
 
-                        // массив имен атрибутов, из которых будут читаться данные
-                        String[] from = {ATTRIBUTE_COMPARE_ID,
-                                ATTRIBUTE_NAME_DATE_CRT,
-    //                ATTRIBUTE_NAME_CHECKED,
-                                ATTRIBUTE_NAME_LEFT, ATTRIBUTE_NAME_RIGHT,ATTRIBUTE_VOITE_LEFT,ATTRIBUTE_VOITE_RIGHT, ATTRIBUTE_NAME_PB,
-                                ATTRIBUTE_ORNT_LEFT,ATTRIBUTE_ORNT_RIGHT};
-                        // массив ID View-компонентов, в которые будут вставлять данные
-                        int[] to = {R.id.tvCid, R.id.tvCdate, R.id.ivLeft, R.id.ivRight, R.id.tvVoiteLeft, R.id.tvVoiteRight, R.id.pbLoad,};
-
-                        // создаем адаптер
-                        sAdapter = new MySimpleAdapter(activity, data4list, R.layout.mine_list_view,
-                                from, to);
-
-                        // Указываем адаптеру свой биндер
-                        sAdapter.setViewBinder(new MyViewBinder());
-                        // к списоку присваиваем ему адаптер
-                        lvSimple.setAdapter(sAdapter);
-
-
-//                        // формируем столбцы сопоставления
-//                        String[] from_c = new String[] { DB.COLUMN_IMG, DB.COLUMN_TXT };
-////                        int[] to = new int[] { R.id.ivImg, R.id.tvText };
+//                        // массив имен атрибутов, из которых будут читаться данные
+//                        String[] from = {ATTRIBUTE_COMPARE_ID,
+//                                ATTRIBUTE_NAME_DATE_CRT,
+//    //                ATTRIBUTE_NAME_CHECKED,
+//                                ATTRIBUTE_NAME_LEFT, ATTRIBUTE_NAME_RIGHT,ATTRIBUTE_VOITE_LEFT,ATTRIBUTE_VOITE_RIGHT, ATTRIBUTE_NAME_PB,
+//                                ATTRIBUTE_ORNT_LEFT,ATTRIBUTE_ORNT_RIGHT};
+//                        // массив ID View-компонентов, в которые будут вставлять данные
+//                        int[] to = {R.id.tvCid, R.id.tvCdate, R.id.ivLeft, R.id.ivRight, R.id.tvVoiteLeft, R.id.tvVoiteRight, R.id.pbLoad,};
 //
-//                        // создааем адаптер и настраиваем список
-//                        scAdapter = new SimpleCursorAdapter(activity, R.layout.mine_list_view, null, from, to, 0);
-////                        lvData = (ListView) findViewById(R.id.lvData);
-//                        lvSimple.setAdapter(scAdapter);
-    //                    JSONObject joCompare = jaCompare.getJSONObject(0);
-    //                    String date_crt = joCompare.getString("date_crt");
+//                        // создаем адаптер
+//                        sAdapter = new MySimpleAdapter(activity, data4list, R.layout.mine_list_view,
+//                                from, to);
+//
+//                        // Указываем адаптеру свой биндер
+//                        sAdapter.setViewBinder(new MyViewBinder());
+//                        // к списоку присваиваем ему адаптер
+//                        lvSimple.setAdapter(sAdapter);
+
                     }
 
                 }else{
@@ -435,66 +412,14 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 pbLoad.setMax(iall_voite);
                 pbLoad.setSecondaryProgress(iall_voiteLeft);
                 pbLoad.setProgress(iall_voite);
-//                pbLoad.setMax(5);
-//                pbLoad.setSecondaryProgress(3);
-//                pbLoad.setProgress(5);
 
                 int img = R.drawable.abc_ic_clear_mtrl_alpha;
-//                if (url_left.equals("empty")) {
-//                    url_left = "empty.png";
-//                }
-//                if (url_right.equals("empty")) {
-//                    url_right = "empty.png";
-//                }
                 ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_left, img, ivLeft, imgOrientation_left_i);
                 ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_right, img, ivRight, imgOrientation_right_i);
                 return vi;
             }
         }
 
-
-
-        /*
-        class MySimpleAdapter2 extends SimpleAdapter {
-
-            ArrayList<MineCompare> objects;
-            private Context mContext;
-            public ImageLoader imageLoader;
-            public LayoutInflater inflater=null;
-            public MySimpleAdapter2(Context context,
-                                    ArrayList<MineCompare> MineCompares, int resource,
-                                   String[] from, int[] to) {
-                super(context, objects, resource, from, to);
-                mContext = context;
-                inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                imageLoader=new ImageLoader(mContext.getApplicationContext());
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-//                View vi=convertView;
-//                if(convertView==null)
-//                    vi = inflater.inflate(R.layout.mine_list_view, null);
-//
-//                HashMap<String, Object> data = (HashMap<String, Object>) getItem(position);
-//                TextView tvCid = (TextView)vi.findViewById(R.id.tvCid);
-//                TextView tvCdate = (TextView)vi.findViewById(R.id.tvCdate);
-//                ImageView ivLeft=(ImageView)vi.findViewById(R.id.ivLeft);
-//                ImageView ivRight=(ImageView)vi.findViewById(R.id.ivRight);
-//                String strCid = (String) data.get(ATTRIBUTE_COMPARE_ID);
-//                String strCdate = (String) data.get(ATTRIBUTE_NAME_DATE_CRT);
-//                String url_left = (String) data.get(ATTRIBUTE_NAME_LEFT);
-//                String url_right = (String) data.get(ATTRIBUTE_NAME_RIGHT);
-//                tvCid.setText(strCid);
-//                tvCdate.setText(strCdate);
-//
-//                int img = R.drawable.abc_ic_clear_normal;
-//                imageLoader.DisplayImage(url_left, img, ivLeft);
-//                imageLoader.DisplayImage(url_right, img, ivRight);
-//                return vi;
-            }
-        }
-        */
     }
 
 
@@ -540,7 +465,6 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 Toast.makeText(getBaseContext(), "простите, не смог создать Selfie :(", Toast.LENGTH_LONG).show();
             }
         }
-
     }
     //---- Delete
     private class DeleteCompareHttpAsyncTask extends AsyncTask<String, Void, String> {
@@ -600,11 +524,6 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 menu.add(0, MENU_VOITE_RED_RIGHT, 0, "Проголосавать за Красную");
                 menu.add(0, MENU_DELETE, 0, "Удалить");
                 break;
-//            case R.id.tvSize:
-//                menu.add(0, MENU_SIZE_22, 0, "22");
-//                menu.add(0, MENU_SIZE_26, 0, "26");
-//                menu.add(0, MENU_SIZE_30, 0, "30");
-//                break;
         }
     }
     @Override
@@ -670,16 +589,16 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 
         DB_MineCompare db_MC_;
 
-        public MyCursorLoader(Context context, DB_MineCompare db_MC) {
+        public MyCursorLoader(Context context, DB_MineCompare db_MC_i) {
             super(context);
-            this.db_MC_ = db_MC;
+            this.db_MC_ = db_MC_i;
         }
 
         @Override
         public Cursor loadInBackground() {
             Cursor cursor = db_MC_.getAllDataMC();
             try {
-                TimeUnit.SECONDS.sleep(3);
+                TimeUnit.SECONDS.sleep(0);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -688,45 +607,42 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 
     }
 
-
     public class MySimpleCursorAdapter extends SimpleCursorAdapter{
         private Context mContext;
-        public ImageLoaderSmall ImageLoaderSmall;
-        public Cursor  cur_t;
+//        public ImageLoaderSmall ImageLoaderSmall;
+//        public Cursor  cur_t;
         public LayoutInflater inflater=null;
         public MySimpleCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags)
         {
             super(context, layout, c, from, to,0);
             mContext = context;
-            this.cur_t = c;
+//            this.cur_t = c;
             inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            ImageLoaderSmall=new ImageLoaderSmall(mContext.getApplicationContext());
-
-//            this.cur_t.moveToFirst();
         }
-
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-//                View view = super.getView(position, convertView, parent);
-//                long id=getItemId(position);
-//                view.setTag(id);
-//                return view;
-            View vi=convertView;
-            if(convertView==null)
-                vi = inflater.inflate(R.layout.mine_list_view, null);
-            Cursor cur_i;
-            cur_i = this.cur_t;
-//            int cnt = cur_i.getCount();
-//            final int rowID = cur_t.getInt(cur_t.getColumnIndex("_id"));  //Добавил это
-//            this.cur_t.moveToPosition(position);
-//            int rowID = this.cur_t.getInt(cur_t.getColumnIndex("img"));  //Добавил это
-//            this.cur_t.moveToPosition(position);
-//                HashMap<String, Object> data = (HashMap<String, Object>) getItem(position);
-                TextView tvCid = (TextView)vi.findViewById(R.id.tvCid);
-                String strCid = "9999";
-                tvCid.setText(strCid);
+        public void bindView(View v, Context context, Cursor c) {
+            String cid = c.getString(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_CID));
+            String cdate = c.getString(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_DATE_CRT));
+            int cVoiteLeft = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_LEFT));
+            int cVoiteRight = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_RIGHT));
 
-            return vi;
+            TextView tvCid = (TextView) v.findViewById(R.id.tvCid);
+            TextView tvCdate = (TextView) v.findViewById(R.id.tvCdate);
+            ImageView ivLeft = (ImageView) v.findViewById(R.id.ivLeft);
+            ImageView ivRight = (ImageView) v.findViewById(R.id.ivRight);
+            TextView tvVoiteLeft = (TextView) v.findViewById(R.id.tvVoiteLeft);
+            TextView tvVoiteRight = (TextView) v.findViewById(R.id.tvVoiteRight);
+            ProgressBar pbLoad = (ProgressBar) v.findViewById(R.id.pbLoad);
+
+            tvCid.setText(cid);
+            tvCdate.setText(cdate);
+            tvVoiteLeft.setText(""+cVoiteLeft);
+            tvVoiteRight.setText(""+cVoiteRight);
+
+            int iall_voite = cVoiteLeft+cVoiteRight;
+            pbLoad.setMax(iall_voite);
+            pbLoad.setSecondaryProgress(cVoiteLeft);
+            pbLoad.setProgress(iall_voite);
         }
     }
 

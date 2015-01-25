@@ -11,8 +11,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DB_MineCompare {
 
-    private static final String DB_NAME = "SelfyTest3";
-    private static final int DB_VERSION = 1;
+    private static final String DB_NAME = "SelfyTest4";
+    private static final int DB_VERSION = 4;
 
     private static final String DBT_MC = "my_compare";
 
@@ -27,7 +27,6 @@ public class DB_MineCompare {
     public static final String C_MC_ORNT_RIGHT = "imgOrientation_right";
     public static final String C_MC_STATUS = "status";
 
-
     private static final String DB_MC_CREATE =
             "create table " + DBT_MC + " (" +
                     C_MC_ID + " integer primary key autoincrement,  " +
@@ -41,8 +40,6 @@ public class DB_MineCompare {
                     C_MC_ORNT_RIGHT + " integer, " +
                     C_MC_STATUS + " integer " +
                     "); ";
-
-
 
     private final Context mCtx;
 
@@ -69,12 +66,23 @@ public class DB_MineCompare {
         return mDB.query(DBT_MC, null,null, null, null, null, null);
     }
 
+    // получить max id из таблицы DBT_MC
+    public String getLastIdMC() {
+        String qr ="SELECT MAX("+C_MC_CID+") as "+C_MC_CID+" FROM "+DBT_MC;
+        Cursor cursor = mDB.rawQuery(qr, null);
+        cursor.moveToFirst(); // переходим на первую строку
+        String maxid = cursor.getString(cursor.getColumnIndex(C_MC_CID));
+        if (maxid == null) {
+            maxid ="0";
+        }
+        return maxid;
+    }
     // добавить запись в DBT_MC
     public void addRecMC(int CID, String DATE_CRT, int VOITE_LEFT, int VOITE_RIGHT, int PHOTO_LEFT, int PHOTO_RIGHT,
                          int ORNT_LEFT, int ORNT_RIGHT, int STATUS ) {
 
         ContentValues cv = new ContentValues();
-        cv.put(C_MC_ID, CID);
+        cv.put(C_MC_CID, CID);
         cv.put(C_MC_DATE_CRT, DATE_CRT);
         cv.put(C_MC_VOITE_LEFT, VOITE_LEFT);
         cv.put(C_MC_VOITE_RIGHT, VOITE_RIGHT);
@@ -85,8 +93,6 @@ public class DB_MineCompare {
         cv.put(C_MC_STATUS, STATUS);
         mDB.insert(DBT_MC, null, cv);
     }
-
-
 
     // класс по созданию и управлению БД
     private class DBHelper extends SQLiteOpenHelper {
@@ -103,16 +109,26 @@ public class DB_MineCompare {
             db.execSQL(DB_MC_CREATE);
 
             // заполняем БД
-//            for (int i = 1; i < 10; i++) {
-//                addRecMC(i,"2015-01-25 "+i,1,1,R.drawable.ic_launcher,R.drawable.ic_launcher,0,0,0);
-//            }
+            for (int i = 1; i < 3; i++) {
+                ContentValues cv = new ContentValues();
+                cv.put(C_MC_CID, i);
+                cv.put(C_MC_DATE_CRT,  "2015-01-25 "+i);
+                cv.put(C_MC_VOITE_LEFT, 1);
+                cv.put(C_MC_VOITE_RIGHT, 1);
+                cv.put(C_MC_PHOTO_LEFT, R.drawable.ic_launcher);
+                cv.put(C_MC_PHOTO_RIGHT, R.drawable.ic_launcher);
+                cv.put(C_MC_ORNT_LEFT, 0);
+                cv.put(C_MC_ORNT_RIGHT, 0);
+                cv.put(C_MC_STATUS, 0);
+                db.insert(DBT_MC, null, cv);
+            }
 
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-            db.execSQL(" DROP TABLE IF EXISTS " + DBT_MC+"; ");
+            db.execSQL(" DROP TABLE IF EXISTS " + DBT_MC+" ");
             onCreate(db);
         }
     }
