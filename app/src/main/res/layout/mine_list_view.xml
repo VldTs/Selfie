@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="112dp"
+            android:layout_height="112dp">
+
+            <ImageView
+                android:id="@+id/ivLeft"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/abc_ic_clear_mtrl_alpha"
+                android:background="@drawable/image_border_blue"
+                android:padding="3dp"
+                android:paddingLeft="0dp"
+                android:layout_margin="1dp">
+            </ImageView>
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+            <TextView
+            android:id="@+id/tvCid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+        </TextView>
+            <TextView
+                android:id="@+id/tvCdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="2014-11-25"
+                android:background="#cccccc"
+                android:textSize="12dp"></TextView>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/tvVoiteLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="40"
+                    android:textSize="28dp"
+                    android:textStyle="bold">
+                </TextView>
+                <TextView
+                    android:id="@+id/tvText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=" VS "
+                    android:textSize="18dp"
+                    android:textStyle="bold">
+                </TextView>
+                <TextView
+                    android:id="@+id/tvVoiteRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="97"
+                    android:textSize="28dp"
+                    android:textStyle="bold">
+                </TextView>
+            </LinearLayout>
+
+            <ProgressBar
+            android:id="@+id/pbLoad"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+                android:progressDrawable="@drawable/verticalprogressbar"
+                android:max="5"
+                android:progress="5"
+                android:secondaryProgress="2">
+        </ProgressBar>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="112dp"
+            android:layout_height="112dp">
+
+            <ImageView
+                android:id="@+id/ivRight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/abc_ic_clear_mtrl_alpha"
+                android:layout_margin="1dp"
+                android:background="@drawable/image_border_red"
+                android:padding="3dp">
+            </ImageView>
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

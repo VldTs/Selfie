@@ -1,0 +1,178 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    tools:context="ru.tsarcom.selfie.LoginActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="VIEW"
+                android:id="@+id/textView"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MINE"
+                android:id="@+id/btnMine"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OTHERS"
+                android:id="@+id/btnOthers"
+                android:layout_weight="1" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NEW"
+                android:id="@+id/btnCreate"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Опубликовать"
+            android:id="@+id/btnShare" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/horizontalScrollView" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_alignParentTop="false">
+
+                        <ImageView
+                            android:layout_width="380dp"
+                            android:layout_height="380dp"
+                            android:id="@+id/ivLeft"
+                            android:src="@drawable/abc_btn_radio_to_on_mtrl_000"
+                            android:layout_gravity="center"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="я выбираю эту"
+                            android:id="@+id/btnVoiteLeft"
+                            android:textStyle="bold"
+                            android:textSize="30dp"
+                            android:background="#000080"
+                            android:textColor="#ffffff"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginBottom="3dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="-"
+                        android:id="@+id/tvVoiteLeft"
+                        android:textSize="30dp"
+                        android:layout_weight="1"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentEnd="false"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignWithParentIfMissing="false"
+                        android:layout_alignParentBottom="false"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentStart="false"
+                        android:layout_centerHorizontal="true" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <ImageView
+                            android:layout_width="380dp"
+                            android:layout_height="380dp"
+                            android:id="@+id/ivRight"
+                            android:src="@drawable/abc_btn_radio_to_on_mtrl_000"
+                            android:layout_gravity="center"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="а я выбираю эту"
+                            android:id="@+id/btnVoiteRight"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="#ffffff"
+                            android:textSize="30dp"
+                            android:textStyle="bold"
+                            android:background="#C00000"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginBottom="3dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="-"
+                        android:id="@+id/tvVoiteRight"
+                        android:textSize="30dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignWithParentIfMissing="false"
+                        android:layout_alignParentBottom="false"
+                        android:layout_alignParentLeft="false" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>

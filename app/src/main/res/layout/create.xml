@@ -1,0 +1,90 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    tools:context="ru.tsarcom.selfie.LoginActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="CREATE"
+                android:id="@+id/textView"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MINE"
+                android:id="@+id/btnMine"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OTHERS"
+                android:id="@+id/btnOthers"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="опубликовать"
+            android:id="@+id/btnShare" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="..."
+            android:id="@+id/messageText"
+            android:textSize="14dp" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/horizontalScrollView" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <ImageView
+                    android:layout_width="380dp"
+                    android:layout_height="380dp"
+                    android:id="@+id/ivLeft"
+                    android:src="@drawable/plus_left"
+                    android:layout_gravity="center" />
+
+                <ImageView
+                    android:layout_width="380dp"
+                    android:layout_height="380dp"
+                    android:id="@+id/ivRight"
+                    android:src="@drawable/plus_right"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+
+    </LinearLayout>
+
+</RelativeLayout>
