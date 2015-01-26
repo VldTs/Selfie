@@ -116,6 +116,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
     DB_MineCompare db_MC;
     SimpleCursorAdapter scAdapter;
 
+            public ImageLoaderSmall ImageLoaderSmall0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,15 +129,32 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         activity = this;
 
 
-//        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "savedBitmap3.jpg");
-        File file = new File(getCacheDir(), "savedBitmap3.jpg");
+        File pathf;
+        String path;
+        pathf = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-//        Bitmap bitmap;
+        pathf = new File(pathf.getAbsolutePath() + "/" + "tttt");
+        // создаем каталог
+        pathf.mkdirs();
+        path = pathf.getPath();
+        path = path + "";
+        File file = new File(path, "savedBitmap2_2.jpg");
+
+        Toast.makeText(getBaseContext(), "path = "+path, Toast.LENGTH_LONG).show();
+        Bitmap bitmap0;
+        Bitmap bitmap;
         Paint paint;
-        String url ="http://95.78.234.20:81/atest/uploads/3/114/83/img.jpg";
+//        String url ="http://95.78.234.20:81/atest/uploads/3/114/83/img.jpg";
+        String url ="http://95.78.234.20:81/atest/uploads/3/113/81/img.png";
+
+//        public Bitmap getBitmap(String url);
+
+        ImageLoaderSmall0 = new ImageLoaderSmall(getApplicationContext());
+        bitmap0 = ImageLoaderSmall0.getBitmap(url);
+        bitmap = bitmap0;
 //        bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.RGB_565);
-        MemoryCache memoryCache=new MemoryCache();
-        Bitmap bitmap=memoryCache.get(url);
+//        MemoryCache memoryCache=new MemoryCache();
+//        Bitmap bitmap=memoryCache.get(url);
 //        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 //        paint.setTextSize(40);
 //
