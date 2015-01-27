@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DB_MineCompare {
 
     private static final String DB_NAME = "SelfyTest4";
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 7;
 
     private static final String DBT_MC = "my_compare";
 

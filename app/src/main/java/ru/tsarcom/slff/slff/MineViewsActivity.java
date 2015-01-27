@@ -1,6 +1,7 @@
 package ru.tsarcom.slff.slff;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -40,7 +41,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +114,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
     MineViewsActivity activity;
     Class<CreateActivity> createActivityClass;
 
+    private File baseDir;
 
     private static final int CM_DELETE_ID = 1;
     ListView lvData;
@@ -117,10 +122,24 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
     SimpleCursorAdapter scAdapter;
 
             public ImageLoaderSmall ImageLoaderSmall0;
+
+//    ProgressDialog progress;
+//    @BeforeCreate
+//    public void getProgressDialog(){
+//        progress = new ProgressDialog(this);
+//        progress.setMessage("Loading...");
+//    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mine_views);
+
+        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+            baseDir=new File(android.os.Environment.getExternalStorageDirectory(),"Selfie");
+        else
+            baseDir=getCacheDir();
+        if(!baseDir.exists())
+            baseDir.mkdirs();
 
         Intent intent = getIntent();
         id_account = intent.getStringExtra("id_account");
@@ -131,27 +150,42 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 
         File pathf;
         String path;
+        String fname;
         pathf = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+/*
 
-        pathf = new File(pathf.getAbsolutePath() + "/" + "tttt");
-        // создаем каталог
-        pathf.mkdirs();
+        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+            pathf=new File(android.os.Environment.getExternalStorageDirectory(),"sssss");
+        else
+            pathf=getCacheDir();
+        if(!pathf.exists())
+            pathf.mkdirs();
+//        pathf = new File(pathf.getAbsolutePath() + "/" + "tttt");
+//        // создаем каталог
+//        pathf.mkdirs();
+        path = baseDir.getPath();
         path = pathf.getPath();
         path = path + "";
-        File file = new File(path, "savedBitmap2_2.jpg");
+//        File file = new File(path, "savedBitmap3_2.png");
 
-        Toast.makeText(getBaseContext(), "path = "+path, Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "00000 path = "+path, Toast.LENGTH_LONG).show();
         Bitmap bitmap0;
         Bitmap bitmap;
         Paint paint;
 //        String url ="http://95.78.234.20:81/atest/uploads/3/114/83/img.jpg";
-        String url ="http://95.78.234.20:81/atest/uploads/3/113/81/img.png";
+        String url ="http://95.78.234.20:81/atest/uploads/3/112/79/img.jpg";
 
 //        public Bitmap getBitmap(String url);
 
         ImageLoaderSmall0 = new ImageLoaderSmall(getApplicationContext());
-        bitmap0 = ImageLoaderSmall0.getBitmap(url);
+        fname = "11";
+        bitmap0 = ImageLoaderSmall0.getBitmapWeb(url,pathf,fname);
+        if (null ==bitmap0){
+
+            Toast.makeText(getBaseContext(), "bitmap0 = null"+path, Toast.LENGTH_LONG).show();
+        }
         bitmap = bitmap0;
+        */
 //        bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.RGB_565);
 //        MemoryCache memoryCache=new MemoryCache();
 //        Bitmap bitmap=memoryCache.get(url);
@@ -181,20 +215,22 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        try {
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            } finally {
-                if (fos != null){
-                    Toast.makeText(getBaseContext(), "файл сохранён ", Toast.LENGTH_LONG).show();
-                    fos.close();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            FileOutputStream fos = null;
+//            try {
+//                fos = new FileOutputStream(file);
+//                Toast.makeText(getBaseContext(), "FileOutputStream", Toast.LENGTH_LONG).show();
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+//                Toast.makeText(getBaseContext(), "----- файл сохранён компресс", Toast.LENGTH_LONG).show();
+//            } finally {
+//                if (fos != null){
+//                    Toast.makeText(getBaseContext(), "файл сохранён ", Toast.LENGTH_LONG).show();
+//                    fos.close();
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
 
 //        // открываем подключение к БД
@@ -322,6 +358,9 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         @Override
         protected void onPostExecute(String result) {
             //   Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
+
+
+
             try {
                 jObj = new JSONObject(result);
                 // Getting JSON Array
@@ -363,17 +402,82 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 
                             JSONObject joPhotoLeft = jaPhoto.getJSONObject(0);
                             String pathLeft = joPhotoLeft.getString("path");
+                            int idLeft =  joPhotoLeft.getInt("id");
                             int orientationLeft =  joPhotoLeft.getInt("Orientation");
                             int all_voiteLeft = joPhotoLeft.getInt("all_voite");
+
                             JSONObject joPhotoRight = jaPhoto.getJSONObject(1);
                             String pathRight = joPhotoRight.getString("path");
+                            int idRight =  joPhotoRight.getInt("id");
                             int orientationRight = joPhotoRight.getInt("Orientation");
                             int all_voiteRight = joPhotoRight.getInt("all_voite");
     //                        Toast.makeText(getBaseContext(), "pathRight "+pathRight, Toast.LENGTH_LONG).show();
 
                             db_MC.addRecMC(id, date_crt, all_voiteLeft ,all_voiteRight ,
                                     R.drawable.plus_left, R.drawable.ic_launcher, orientationLeft, orientationRight, 0);
+                            File pathf;
+                            String path;
+//                            pathf = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
+                            pathf = new File(baseDir.getAbsolutePath() + "/" + id);
+                            // создаем каталог
+                            pathf.mkdirs();
+                            path = pathf.getPath();
+
+                            Bitmap bitmap;
+                            ImageLoaderSmall0 = new ImageLoaderSmall(getApplicationContext());
+
+//                            pathf = new File(path + "/" + idLeft);
+//                            // создаем каталог
+//                            pathf.mkdirs();
+
+                            path = path + "";
+                            String url;
+                            String file_path;
+                            File file;
+
+                            file_path = "small"+idLeft+".jpg";
+                            file = new File(path,file_path);
+//                            Toast.makeText(getBaseContext(), "path = "+path+"/"+file_path, Toast.LENGTH_LONG).show();
+
+                            url ="http://95.78.234.20:81/atest/uploads/"+id_account+"/"+id+"/"+idLeft+"/img.png";
+
+                            bitmap = ImageLoaderSmall0.getBitmap(url);
+                            try {
+                                FileOutputStream fos = null;
+                                try {
+                                    fos = new FileOutputStream(file);
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                                } finally {
+                                    if (fos != null){
+//                                        Toast.makeText(getBaseContext(), "файл сохранён ", Toast.LENGTH_LONG).show();
+                                        fos.close();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            file_path = "small"+idRight+".jpg";
+                            file = new File(path, file_path);
+//                            Toast.makeText(getBaseContext(), "path = "+path+" "+file_path, Toast.LENGTH_LONG).show();
+
+                            url ="http://95.78.234.20:81/atest/uploads/"+id_account+"/"+id+"/"+idRight+"/img.png";
+
+                            bitmap = ImageLoaderSmall0.getBitmap(url);
+                            try {
+                                FileOutputStream fos = null;
+                                try {
+                                    fos = new FileOutputStream(file);
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                                } finally {
+                                    if (fos != null){
+//                                        Toast.makeText(getBaseContext(), "файл сохранён ", Toast.LENGTH_LONG).show();
+                                        fos.close();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 
@@ -468,6 +572,8 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 int img = R.drawable.abc_ic_clear_mtrl_alpha;
                 ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_left, img, ivLeft, imgOrientation_left_i);
                 ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_right, img, ivRight, imgOrientation_right_i);
+
+
                 return vi;
             }
         }
@@ -659,7 +765,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 
     public class MySimpleCursorAdapter extends SimpleCursorAdapter{
         private Context mContext;
-//        public ImageLoaderSmall ImageLoaderSmall;
+        public ImageLoaderSmall ImageLoaderSmall;
 //        public Cursor  cur_t;
         public LayoutInflater inflater=null;
         public MySimpleCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags)
@@ -668,16 +774,19 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
             mContext = context;
 //            this.cur_t = c;
             inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            ImageLoaderSmall=new ImageLoaderSmall(mContext.getApplicationContext());
         }
         @Override
         public void bindView(View v, Context context, Cursor c) {
-            String cid = c.getString(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_CID));
+            int cid = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_CID));
             String cdate = c.getString(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_DATE_CRT));
             int cVoiteLeft = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_LEFT));
             int cVoiteRight = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_RIGHT));
             int imgLeft = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_LEFT));
             int imgRight = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_RIGHT));
 
+            int imgOrientation_left_i = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_ORNT_LEFT));
+            int imgOrientation_right_i = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_ORNT_RIGHT));
             TextView tvCid = (TextView) v.findViewById(R.id.tvCid);
             TextView tvCdate = (TextView) v.findViewById(R.id.tvCdate);
             ImageView ivLeft = (ImageView) v.findViewById(R.id.ivLeft);
@@ -687,7 +796,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
             ProgressBar pbLoad = (ProgressBar) v.findViewById(R.id.pbLoad);
 //            Bitmap btm;
 //            btm = (Bitmap) imgLeft;
-            tvCid.setText(cid);
+            tvCid.setText(""+cid);
             tvCdate.setText(cdate);
 //            ivLeft.setImageResource(0x7f020037);
 //            ivLeft.setImageResource(imgLeft);
@@ -700,8 +809,49 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
             pbLoad.setMax(iall_voite);
             pbLoad.setSecondaryProgress(cVoiteLeft);
             pbLoad.setProgress(iall_voite);
+
+            String url_left = "uploads/3/113/81/img.png";
+//            String url_right = "uploads/3/167/157/img.png";
+            String url_right = "uploads/3/161/153/img.jpg";
+//            http://95.78.234.20:81/atest/uploads/3/167/157/img.png
+            int img = R.drawable.abc_ic_clear_mtrl_alpha;
+            ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_left, img, ivLeft, imgOrientation_left_i);
+//            ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_right, img, ivRight, imgOrientation_right_i);
+//
+//
+//
+            File pathf0;
+//            String path0;
+//            String fname;
+            if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+                pathf0=new File(android.os.Environment.getExternalStorageDirectory(),"sssss");
+            else
+                pathf0=getCacheDir();
+            if(!pathf0.exists())
+                pathf0.mkdirs();
+//            path0 = pathf0.getPath();
+//            path0 = path0 + "";
+////        File file = new File(path, "savedBitmap3_2.png");
+//
+////            Toast.makeText(getBaseContext(), "00000 path = "+path0, Toast.LENGTH_LONG).show();
+//            Bitmap bitmap00;
+////        String url ="http://95.78.234.20:81/atest/uploads/3/114/83/img.jpg";
+//            String url0 ="http://95.78.234.20:81/atest/uploads/3/154/149/img.jpg";
+//
+////        public Bitmap getBitmap(String url);
+//
+//            ImageLoaderSmall0 = new ImageLoaderSmall(getApplicationContext());
+//            fname = "11";
+//            bitmap00 = ImageLoaderSmall0.getBitmapWeb(url0,pathf0,fname);
+//
+            int pid =1;
+            ImageLoaderSmall.DisplayImageAndSave("http://95.78.234.20:81/atest/"+url_right, img, ivRight,
+                    imgOrientation_right_i, pathf0,  cid,  pid);
+//            if (null ==bitmap00){
+////                Toast.makeText(getBaseContext(), "bitmap00 = null", Toast.LENGTH_LONG).show();
+//            }
+
         }
     }
-
 
 }

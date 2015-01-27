@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,10 +26,12 @@ public class ImageLoaderSmall {
 
     MemoryCache memoryCache=new MemoryCache();
     FileCache fileCache;
+    Context iContext;
     private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService;
 
     public ImageLoaderSmall(Context context){
+        iContext = context;
         fileCache=new FileCache(context);
         executorService=Executors.newFixedThreadPool(5);
     }
@@ -68,22 +71,24 @@ public class ImageLoaderSmall {
             imageView.setImageResource(loader);
         }
     }
- 
+
+
     private void queuePhoto(String url, ImageView imageView)
     {
         PhotoToLoad p=new PhotoToLoad(url, imageView);
         executorService.submit(new PhotosLoader(p));
     }
 
+
     public Bitmap getBitmap(String url)
     {
         File f=fileCache.getFile(url);
- 
+
         //from SD cache
         Bitmap b = decodeFile(f);
         if(b!=null)
             return b;
- 
+
         //from web
         try {
             Bitmap bitmap=null;
@@ -99,8 +104,8 @@ public class ImageLoaderSmall {
             bitmap = decodeFile(f);
             return bitmap;
         } catch (Exception ex){
-           ex.printStackTrace();
-           return null;
+            ex.printStackTrace();
+            return null;
         }
     }
 
@@ -142,13 +147,13 @@ public class ImageLoaderSmall {
             imageView=i;
         }
     }
- 
+
     class PhotosLoader implements Runnable {
         PhotoToLoad photoToLoad;
         PhotosLoader(PhotoToLoad photoToLoad){
             this.photoToLoad=photoToLoad;
         }
- 
+
         @Override
         public void run() {
             if(imageViewReused(photoToLoad))
@@ -162,14 +167,14 @@ public class ImageLoaderSmall {
             a.runOnUiThread(bd);
         }
     }
- 
+
     boolean imageViewReused(PhotoToLoad photoToLoad){
         String tag=imageViews.get(photoToLoad.imageView);
         if(tag==null || !tag.equals(photoToLoad.url))
             return true;
         return false;
     }
- 
+
     //Used to display bitmap in the UI thread
     class BitmapDisplayer implements Runnable
     {
@@ -186,10 +191,137 @@ public class ImageLoaderSmall {
                 photoToLoad.imageView.setImageResource(stub_id);
         }
     }
- 
+
+
     public void clearCache() {
         memoryCache.clear();
         fileCache.clear();
     }
+    // -----------------------------------
+
+    public void DisplayImageAndSave(String url, int loader, ImageView imageView, int imgOrientation,
+                                    File dir_path_, int cid_, int pid_)
+    {
+        stub_id = loader;
+        imageViews.put(imageView, url);
+        Bitmap bitmap=memoryCache.get(url);
+//
+        if(bitmap!=null) {
+
+//            Toast.makeText(iContext, "DisplayImageAndSave bitmap!=null ",
+//                    Toast.LENGTH_SHORT).show();
+            imageView.setImageBitmap(bitmap);
+        }
+        else
+        {
+
+//            Toast.makeText(iContext, "DisplayImageAndSave bitmap=====null ",
+//                    Toast.LENGTH_SHORT).show();
+            queuePhoto2(url, imageView, dir_path_,  cid_,  pid_);
+            imageView.setImageResource(loader);
+        }
+    }
+    public Bitmap getBitmapWeb(String url, File dpath, String fname)
+    {
+        File f=fileCache.getFileAndSave(url, dpath, fname);
+
+        //from SD cache
+        Bitmap b = decodeFile(f);
+        if(b!=null) {
+//            Toast.makeText(iContext, "getBitmapWeb from SD cache decodeFile ",
+//                    Toast.LENGTH_SHORT).show();
+            return b;
+        }
+
+        //from web
+        try {
+//            Toast.makeText(iContext, "getBitmapWeb from WEB  ",
+//                    Toast.LENGTH_SHORT).show();
+            Bitmap bitmap=null;
+            URL imageUrl = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
+            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(30000);
+            conn.setInstanceFollowRedirects(true);
+            InputStream is=conn.getInputStream();
+            OutputStream os = new FileOutputStream(f);
+            Utils.CopyStream(is, os);
+            os.close();
+            bitmap = decodeFile(f);
+            if(bitmap!=null) {
+//                Toast.makeText(iContext, "getBitmapWeb from WEB bitmap!=null ",
+//                        Toast.LENGTH_SHORT).show();
+            }
+            return bitmap;
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    private void queuePhoto2(String url, ImageView imageView,File dir_path_, int cid_, int pid_)
+    {
+        PhotoToLoad2 p=new PhotoToLoad2(url, imageView, dir_path_, cid_, pid_);
+        executorService.submit(new PhotosLoader2(p));
+    }
+    //Task for the queue
+    private class PhotoToLoad2
+    {
+        public String url;
+        public ImageView imageView;
+        public File dir_path;
+        public int cid;
+        public int pid;
+        public PhotoToLoad2(String u, ImageView i,File dir_path_, int cid_, int pid_){
+            url=u;
+            imageView=i;
+            dir_path = dir_path_;
+            cid = cid_;
+            pid = pid_;
+        }
+    }
+    class PhotosLoader2 implements Runnable {
+        PhotoToLoad2 photoToLoad2;
+        PhotosLoader2(PhotoToLoad2 photoToLoad2){
+            this.photoToLoad2=photoToLoad2;
+        }
+
+        @Override
+        public void run() {
+            if(imageViewReused2(photoToLoad2))
+                return;
+            Bitmap bmp=getBitmap(photoToLoad2.url);
+            memoryCache.put(photoToLoad2.url, bmp);
+            if(imageViewReused2(photoToLoad2))
+                return;
+            BitmapDisplayer2 bd=new BitmapDisplayer2(bmp, photoToLoad2);
+            Activity a=(Activity)photoToLoad2.imageView.getContext();
+            a.runOnUiThread(bd);
+        }
+    }
+ 
+    boolean imageViewReused2(PhotoToLoad2 photoToLoad2){
+        String tag=imageViews.get(photoToLoad2.imageView);
+        if(tag==null || !tag.equals(photoToLoad2.url))
+            return true;
+        return false;
+    }
+ 
+    //Used to display bitmap in the UI thread
+    class BitmapDisplayer2 implements Runnable
+    {
+        Bitmap bitmap;
+        PhotoToLoad2 photoToLoad2;
+        public BitmapDisplayer2(Bitmap b, PhotoToLoad2 p){bitmap=b;photoToLoad2=p;}
+        public void run()
+        {
+            if(imageViewReused2(photoToLoad2))
+                return;
+            if(bitmap!=null)
+                photoToLoad2.imageView.setImageBitmap(bitmap);
+            else
+                photoToLoad2.imageView.setImageResource(stub_id);
+        }
+    }
+
  
 }
