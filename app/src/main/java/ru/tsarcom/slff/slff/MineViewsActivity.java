@@ -812,7 +812,8 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 
             String url_left = "uploads/3/113/81/img.png";
 //            String url_right = "uploads/3/167/157/img.png";
-            String url_right = "uploads/3/161/153/img.jpg";
+//            String url_right = "uploads/3/161/153/img.jpg";
+            String url_right = "uploads/3/167/156/img.jpg";
 //            http://95.78.234.20:81/atest/uploads/3/167/157/img.png
             int img = R.drawable.abc_ic_clear_mtrl_alpha;
             ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_left, img, ivLeft, imgOrientation_left_i);
@@ -822,7 +823,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 //
             File pathf0;
 //            String path0;
-//            String fname;
+            String fname;
             if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
                 pathf0=new File(android.os.Environment.getExternalStorageDirectory(),"sssss");
             else
@@ -841,12 +842,12 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 ////        public Bitmap getBitmap(String url);
 //
 //            ImageLoaderSmall0 = new ImageLoaderSmall(getApplicationContext());
-//            fname = "11";
 //            bitmap00 = ImageLoaderSmall0.getBitmapWeb(url0,pathf0,fname);
 //
             int pid =1;
+            fname = ""+pid;
             ImageLoaderSmall.DisplayImageAndSave("http://95.78.234.20:81/atest/"+url_right, img, ivRight,
-                    imgOrientation_right_i, pathf0,  cid,  pid);
+                    imgOrientation_right_i, pathf0,  cid,  pid, fname);
 //            if (null ==bitmap00){
 ////                Toast.makeText(getBaseContext(), "bitmap00 = null", Toast.LENGTH_LONG).show();
 //            }

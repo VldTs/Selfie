@@ -200,7 +200,7 @@ public class ImageLoaderSmall {
     // -----------------------------------
 
     public void DisplayImageAndSave(String url, int loader, ImageView imageView, int imgOrientation,
-                                    File dir_path_, int cid_, int pid_)
+                                    File dir_path_, int cid_, int pid_, String fname_)
     {
         stub_id = loader;
         imageViews.put(imageView, url);
@@ -217,7 +217,7 @@ public class ImageLoaderSmall {
 
 //            Toast.makeText(iContext, "DisplayImageAndSave bitmap=====null ",
 //                    Toast.LENGTH_SHORT).show();
-            queuePhoto2(url, imageView, dir_path_,  cid_,  pid_);
+            queuePhoto2(url, imageView, dir_path_,  cid_,  pid_,  fname_);
             imageView.setImageResource(loader);
         }
     }
@@ -258,9 +258,9 @@ public class ImageLoaderSmall {
             return null;
         }
     }
-    private void queuePhoto2(String url, ImageView imageView,File dir_path_, int cid_, int pid_)
+    private void queuePhoto2(String url, ImageView imageView,File dir_path_, int cid_, int pid_, String fname_)
     {
-        PhotoToLoad2 p=new PhotoToLoad2(url, imageView, dir_path_, cid_, pid_);
+        PhotoToLoad2 p=new PhotoToLoad2(url, imageView, dir_path_, cid_, pid_,  fname_);
         executorService.submit(new PhotosLoader2(p));
     }
     //Task for the queue
@@ -271,12 +271,14 @@ public class ImageLoaderSmall {
         public File dir_path;
         public int cid;
         public int pid;
-        public PhotoToLoad2(String u, ImageView i,File dir_path_, int cid_, int pid_){
+        public String fname;
+        public PhotoToLoad2(String u, ImageView i,File dir_path_, int cid_, int pid_, String fname_){
             url=u;
             imageView=i;
             dir_path = dir_path_;
             cid = cid_;
             pid = pid_;
+            fname = fname_;
         }
     }
     class PhotosLoader2 implements Runnable {
@@ -289,7 +291,7 @@ public class ImageLoaderSmall {
         public void run() {
             if(imageViewReused2(photoToLoad2))
                 return;
-            Bitmap bmp=getBitmap(photoToLoad2.url);
+            Bitmap bmp=getBitmapWeb(photoToLoad2.url,photoToLoad2.dir_path,photoToLoad2.fname);
             memoryCache.put(photoToLoad2.url, bmp);
             if(imageViewReused2(photoToLoad2))
                 return;
