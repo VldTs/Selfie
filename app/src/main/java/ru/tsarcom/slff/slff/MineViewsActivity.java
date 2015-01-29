@@ -414,70 +414,20 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
     //                        Toast.makeText(getBaseContext(), "pathRight "+pathRight, Toast.LENGTH_LONG).show();
 
                             db_MC.addRecMC(id, date_crt, all_voiteLeft ,all_voiteRight ,
-                                    R.drawable.plus_left, R.drawable.ic_launcher, orientationLeft, orientationRight, 0);
-                            File pathf;
-                            String path;
-//                            pathf = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                                    idLeft, idRight, orientationLeft, orientationRight, pathLeft, pathRight, 0);
 
-                            pathf = new File(baseDir.getAbsolutePath() + "/" + id);
-                            // создаем каталог
-                            pathf.mkdirs();
-                            path = pathf.getPath();
-
-                            Bitmap bitmap;
-                            ImageLoaderSmall0 = new ImageLoaderSmall(getApplicationContext());
-
-//                            pathf = new File(path + "/" + idLeft);
-//                            // создаем каталог
-//                            pathf.mkdirs();
-
-                            path = path + "";
-                            String url;
-                            String file_path;
-                            File file;
-
-                            file_path = "small"+idLeft+".jpg";
-                            file = new File(path,file_path);
-//                            Toast.makeText(getBaseContext(), "path = "+path+"/"+file_path, Toast.LENGTH_LONG).show();
-
-                            url ="http://95.78.234.20:81/atest/uploads/"+id_account+"/"+id+"/"+idLeft+"/img.png";
-
-                            bitmap = ImageLoaderSmall0.getBitmap(url);
-                            try {
-                                FileOutputStream fos = null;
-                                try {
-                                    fos = new FileOutputStream(file);
-                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                                } finally {
-                                    if (fos != null){
-//                                        Toast.makeText(getBaseContext(), "файл сохранён ", Toast.LENGTH_LONG).show();
-                                        fos.close();
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            file_path = "small"+idRight+".jpg";
-                            file = new File(path, file_path);
-//                            Toast.makeText(getBaseContext(), "path = "+path+" "+file_path, Toast.LENGTH_LONG).show();
-
-                            url ="http://95.78.234.20:81/atest/uploads/"+id_account+"/"+id+"/"+idRight+"/img.png";
-
-                            bitmap = ImageLoaderSmall0.getBitmap(url);
-                            try {
-                                FileOutputStream fos = null;
-                                try {
-                                    fos = new FileOutputStream(file);
-                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                                } finally {
-                                    if (fos != null){
-//                                        Toast.makeText(getBaseContext(), "файл сохранён ", Toast.LENGTH_LONG).show();
-                                        fos.close();
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+//                            File pathf0;
+//                            String fname;
+//                            if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+//                                pathf0=new File(android.os.Environment.getExternalStorageDirectory(),"sssss");
+//                            else
+//                                pathf0=getCacheDir();
+//                            if(!pathf0.exists())
+//                                pathf0.mkdirs();
+//                            fname = ""+idRight;
+//                            String url_right = "uploads/3/"+id+"/"+idRight+"/img.png";
+//                            ImageLoaderSmall.DisplayImageAndSave("http://95.78.234.20:81/atest/"+url_right, img, ivRight,
+//                                    orientationRight, pathf0,  id,  idRight, fname);
                         }
                     }
 
@@ -494,89 +444,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 Toast.makeText(getBaseContext(), "простите, не могу загрузить список ваших Selfie :(", Toast.LENGTH_LONG).show();
             }
         }
-        class MySimpleAdapter extends SimpleAdapter {
 
-            private Context mContext;
-            public ImageLoaderSmall ImageLoaderSmall;
-            public LayoutInflater inflater=null;
-            public MySimpleAdapter(Context context,
-                                   List<? extends Map<String, ?>> data, int resource,
-                                   String[] from, int[] to) {
-                super(context, data, resource, from, to);
-                mContext = context;
-                inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                ImageLoaderSmall=new ImageLoaderSmall(mContext.getApplicationContext());
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View vi=convertView;
-                if(convertView==null)
-                    vi = inflater.inflate(R.layout.mine_list_view, null);
-
-                HashMap<String, Object> data = (HashMap<String, Object>) getItem(position);
-                TextView tvCid = (TextView)vi.findViewById(R.id.tvCid);
-                TextView tvCdate = (TextView)vi.findViewById(R.id.tvCdate);
-                TextView tvVoiteLeft = (TextView)vi.findViewById(R.id.tvVoiteLeft);
-                TextView tvVoiteRight = (TextView)vi.findViewById(R.id.tvVoiteRight);
-                ProgressBar pbLoad = (ProgressBar)vi.findViewById(R.id.pbLoad);
-                ImageView ivLeft=(ImageView)vi.findViewById(R.id.ivLeft);
-                ImageView ivRight=(ImageView)vi.findViewById(R.id.ivRight);
-                String strCid = (String) data.get(ATTRIBUTE_COMPARE_ID);
-                String strCdate = (String) data.get(ATTRIBUTE_NAME_DATE_CRT);
-                String url_left = (String) data.get(ATTRIBUTE_NAME_LEFT);
-                String url_right = (String) data.get(ATTRIBUTE_NAME_RIGHT);
-                String all_voiteLeft = (String) data.get(ATTRIBUTE_VOITE_LEFT);
-                String all_voiteRight = (String) data.get(ATTRIBUTE_VOITE_RIGHT);
-                String imgOrientation_left = (String) data.get(ATTRIBUTE_ORNT_LEFT);
-                String imgOrientation_right = (String) data.get(ATTRIBUTE_ORNT_RIGHT);
-                tvCid.setText(strCid);
-                tvCdate.setText(strCdate);
-                tvVoiteLeft.setText(all_voiteLeft);
-                tvVoiteRight.setText(all_voiteRight);
-
-                int imgOrientation_left_i = 1;
-                try {
-                    imgOrientation_left_i = Integer.parseInt(imgOrientation_left);
-                } catch(NumberFormatException nfe) {
-                    System.out.println("Could not parse " + imgOrientation_left);
-                }
-                int imgOrientation_right_i = 1;
-                try {
-                    imgOrientation_right_i = Integer.parseInt(imgOrientation_right);
-                } catch(NumberFormatException nfe) {
-                    System.out.println("Could not parse " + imgOrientation_right);
-                }
-//            Toast.makeText(getBaseContext(), "imgOrientation_left = "+imgOrientation_left,
-//                    Toast.LENGTH_SHORT).show();
-//            Toast.makeText(getBaseContext(), "imgOrientation_right = "+imgOrientation_right,
-//                    Toast.LENGTH_SHORT).show();
-                int iall_voiteLeft = 1;
-                try {
-                    iall_voiteLeft = Integer.parseInt(all_voiteLeft);
-                } catch(NumberFormatException nfe) {
-                    System.out.println("Could not parse " + all_voiteLeft);
-                }
-                int iall_voiteRight = 0;
-                int iall_voite = 0;
-                try {
-                    iall_voiteRight = Integer.parseInt(all_voiteRight);
-                } catch(NumberFormatException nfe) {
-                    System.out.println("Could not parse " + all_voiteRight);
-                }
-                iall_voite = iall_voiteLeft+iall_voiteRight;
-                pbLoad.setMax(iall_voite);
-                pbLoad.setSecondaryProgress(iall_voiteLeft);
-                pbLoad.setProgress(iall_voite);
-
-                int img = R.drawable.abc_ic_clear_mtrl_alpha;
-                ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_left, img, ivLeft, imgOrientation_left_i);
-                ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_right, img, ivRight, imgOrientation_right_i);
-
-
-                return vi;
-            }
-        }
 
     }
 
@@ -765,16 +633,14 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 
     public class MySimpleCursorAdapter extends SimpleCursorAdapter{
         private Context mContext;
-        public ImageLoaderSmall ImageLoaderSmall;
-//        public Cursor  cur_t;
+        public ImageLoaderSmallAndSave ImageLoaderSmallAndSave;
         public LayoutInflater inflater=null;
         public MySimpleCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags)
         {
             super(context, layout, c, from, to,0);
             mContext = context;
-//            this.cur_t = c;
             inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            ImageLoaderSmall=new ImageLoaderSmall(mContext.getApplicationContext());
+            ImageLoaderSmallAndSave=new ImageLoaderSmallAndSave(mContext.getApplicationContext());
         }
         @Override
         public void bindView(View v, Context context, Cursor c) {
@@ -782,11 +648,13 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
             String cdate = c.getString(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_DATE_CRT));
             int cVoiteLeft = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_LEFT));
             int cVoiteRight = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_RIGHT));
-            int imgLeft = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_LEFT));
-            int imgRight = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_RIGHT));
+            int cIdLeft = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_PHOTO_LEFT));
+            int cIdRight = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_PHOTO_RIGHT));
 
             int imgOrientation_left_i = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_ORNT_LEFT));
             int imgOrientation_right_i = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_ORNT_RIGHT));
+            String path_left = c.getString(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_PATH_LEFT));
+            String path_right = c.getString(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_PATH_RIGHT));
             TextView tvCid = (TextView) v.findViewById(R.id.tvCid);
             TextView tvCdate = (TextView) v.findViewById(R.id.tvCdate);
             ImageView ivLeft = (ImageView) v.findViewById(R.id.ivLeft);
@@ -794,14 +662,8 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
             TextView tvVoiteLeft = (TextView) v.findViewById(R.id.tvVoiteLeft);
             TextView tvVoiteRight = (TextView) v.findViewById(R.id.tvVoiteRight);
             ProgressBar pbLoad = (ProgressBar) v.findViewById(R.id.pbLoad);
-//            Bitmap btm;
-//            btm = (Bitmap) imgLeft;
             tvCid.setText(""+cid);
             tvCdate.setText(cdate);
-//            ivLeft.setImageResource(0x7f020037);
-//            ivLeft.setImageResource(imgLeft);
-//            ivLeft.setImageBitmap(btm);
-//            ivRight.setImageBitmap(imgRight);
             tvVoiteLeft.setText(""+cVoiteLeft);
             tvVoiteRight.setText(""+cVoiteRight);
 
@@ -810,19 +672,22 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
             pbLoad.setSecondaryProgress(cVoiteLeft);
             pbLoad.setProgress(iall_voite);
 
-            String url_left = "uploads/3/113/81/img.png";
+            String url_left;
+            url_left = "uploads/3/113/81/img.png";
+            url_left = "uploads/3/"+cid+"/"+cIdLeft+"/img.png";
+            url_left = "http://95.78.234.20:81/atest/"+path_left;
 //            String url_right = "uploads/3/167/157/img.png";
 //            String url_right = "uploads/3/161/153/img.jpg";
-            String url_right = "uploads/3/167/156/img.jpg";
+//            String url_right = "uploads/3/167/156/img.jpg";
+            String url_right;
+             url_right = "uploads/3/"+cid+"/"+cIdRight+"/img.jpg";
+            url_right = "http://95.78.234.20:81/atest/"+path_right;
+//             url_right = "uploads/3/"+cid+"/"+cIdRight+"/img.png";
 //            http://95.78.234.20:81/atest/uploads/3/167/157/img.png
             int img = R.drawable.abc_ic_clear_mtrl_alpha;
-            ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_left, img, ivLeft, imgOrientation_left_i);
-//            ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_right, img, ivRight, imgOrientation_right_i);
-//
-//
-//
+//            ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_left, img, ivLeft, imgOrientation_left_i);
+
             File pathf0;
-//            String path0;
             String fname;
             if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
                 pathf0=new File(android.os.Environment.getExternalStorageDirectory(),"sssss");
@@ -830,27 +695,14 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 pathf0=getCacheDir();
             if(!pathf0.exists())
                 pathf0.mkdirs();
-//            path0 = pathf0.getPath();
-//            path0 = path0 + "";
-////        File file = new File(path, "savedBitmap3_2.png");
-//
-////            Toast.makeText(getBaseContext(), "00000 path = "+path0, Toast.LENGTH_LONG).show();
-//            Bitmap bitmap00;
-////        String url ="http://95.78.234.20:81/atest/uploads/3/114/83/img.jpg";
-//            String url0 ="http://95.78.234.20:81/atest/uploads/3/154/149/img.jpg";
-//
-////        public Bitmap getBitmap(String url);
-//
-//            ImageLoaderSmall0 = new ImageLoaderSmall(getApplicationContext());
-//            bitmap00 = ImageLoaderSmall0.getBitmapWeb(url0,pathf0,fname);
-//
-            int pid =1;
-            fname = ""+pid;
-            ImageLoaderSmall.DisplayImageAndSave("http://95.78.234.20:81/atest/"+url_right, img, ivRight,
-                    imgOrientation_right_i, pathf0,  cid,  pid, fname);
-//            if (null ==bitmap00){
-////                Toast.makeText(getBaseContext(), "bitmap00 = null", Toast.LENGTH_LONG).show();
-//            }
+            fname = ""+cIdRight+"";
+//            ImageLoaderSmall.DisplayImage(url_left, img, ivLeft, imgOrientation_left_i);
+            ImageLoaderSmallAndSave.DisplayImageAndSave(url_left, img, ivLeft, imgOrientation_left_i,
+                    pathf0,  cid,  cIdLeft, fname);
+            fname = ""+cIdLeft+"";
+//            ImageLoaderSmall.DisplayImage(url_right, img, ivRight, imgOrientation_right_i);
+            ImageLoaderSmallAndSave.DisplayImageAndSave(url_right, img, ivRight,
+                    imgOrientation_right_i, pathf0,  cid,  cIdRight, fname);
 
         }
     }

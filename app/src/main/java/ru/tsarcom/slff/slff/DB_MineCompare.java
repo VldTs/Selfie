@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DB_MineCompare {
 
     private static final String DB_NAME = "SelfyTest4";
-    private static final int DB_VERSION = 7;
+    private static final int DB_VERSION = 27;
 
     private static final String DBT_MC = "my_compare";
 
@@ -23,6 +23,8 @@ public class DB_MineCompare {
     public static final String C_MC_VOITE_RIGHT = "voite_right";
     public static final String C_MC_PHOTO_LEFT = "img_left";
     public static final String C_MC_PHOTO_RIGHT = "img_right";
+    public static final String C_MC_PATH_LEFT = "path_left";
+    public static final String C_MC_PATH_RIGHT = "path_right";
     public static final String C_MC_ORNT_LEFT = "imgOrientation_left";
     public static final String C_MC_ORNT_RIGHT = "imgOrientation_right";
     public static final String C_MC_STATUS = "status";
@@ -32,6 +34,8 @@ public class DB_MineCompare {
                     C_MC_ID + " integer primary key autoincrement,  " +
                     C_MC_CID + " integer,  " +
                     C_MC_DATE_CRT + " text, " +
+                    C_MC_PATH_LEFT + " text, " +
+                    C_MC_PATH_RIGHT + " text, " +
                     C_MC_VOITE_LEFT + " integer, " +
                     C_MC_VOITE_RIGHT + " integer, " +
                     C_MC_PHOTO_LEFT + " integer, " +
@@ -79,7 +83,7 @@ public class DB_MineCompare {
     }
     // добавить запись в DBT_MC
     public void addRecMC(int CID, String DATE_CRT, int VOITE_LEFT, int VOITE_RIGHT, int PHOTO_LEFT, int PHOTO_RIGHT,
-                         int ORNT_LEFT, int ORNT_RIGHT, int STATUS ) {
+                         int ORNT_LEFT, int ORNT_RIGHT, String PATH_LEFT,  String PATH_RIGHT,  int STATUS ) {
 
         ContentValues cv = new ContentValues();
         cv.put(C_MC_CID, CID);
@@ -88,6 +92,8 @@ public class DB_MineCompare {
         cv.put(C_MC_VOITE_RIGHT, VOITE_RIGHT);
         cv.put(C_MC_PHOTO_LEFT, PHOTO_LEFT);
         cv.put(C_MC_PHOTO_RIGHT, PHOTO_RIGHT);
+        cv.put(C_MC_PATH_LEFT, PATH_LEFT);
+        cv.put(C_MC_PATH_RIGHT, PATH_RIGHT);
         cv.put(C_MC_ORNT_LEFT, ORNT_LEFT);
         cv.put(C_MC_ORNT_RIGHT, ORNT_RIGHT);
         cv.put(C_MC_STATUS, STATUS);
@@ -109,7 +115,7 @@ public class DB_MineCompare {
             db.execSQL(DB_MC_CREATE);
 
             // заполняем БД
-            for (int i = 1; i < 3; i++) {
+            for (int i = 1; i < 0; i++) {
                 ContentValues cv = new ContentValues();
                 cv.put(C_MC_CID, i);
                 cv.put(C_MC_DATE_CRT,  "2015-01-25 "+i);
@@ -117,6 +123,8 @@ public class DB_MineCompare {
                 cv.put(C_MC_VOITE_RIGHT, 1);
                 cv.put(C_MC_PHOTO_LEFT, R.drawable.ic_launcher);
                 cv.put(C_MC_PHOTO_RIGHT, R.drawable.ic_launcher);
+                cv.put(C_MC_PATH_LEFT, "uploads/3/161/153/img.jpg");
+                cv.put(C_MC_PATH_RIGHT, "uploads/3/167/156/img.jpg");
                 cv.put(C_MC_ORNT_LEFT, 0);
                 cv.put(C_MC_ORNT_RIGHT, 0);
                 cv.put(C_MC_STATUS, 0);
