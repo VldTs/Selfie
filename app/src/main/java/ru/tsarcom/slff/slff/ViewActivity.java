@@ -65,6 +65,7 @@ public class ViewActivity extends Activity  implements View.OnClickListener {
         id_account = intent.getStringExtra("id_account");
         id_compare = intent.getStringExtra("id_compare");
 
+        Toast.makeText(getBaseContext(), "id_account = "+id_account+ " id_compare = "+id_compare, Toast.LENGTH_LONG).show();
 
         ivLeft = (ImageView) findViewById(R.id.ivLeft);
         ivRight = (ImageView) findViewById(R.id.ivRight);
@@ -163,6 +164,8 @@ public class ViewActivity extends Activity  implements View.OnClickListener {
     //----
     private class ViewHttpAsyncTask extends AsyncTask<String, Void, String> {
         public String JsonString_t;
+    public ImageLoader ImageLoaderL;
+    public ImageLoader ImageLoaderR;
         @Override
         protected String doInBackground(String... urls) {
             GetFromURL oGetURL = new GetFromURL();
@@ -173,6 +176,8 @@ public class ViewActivity extends Activity  implements View.OnClickListener {
         protected void onPostExecute(String result) {
             //   Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
 
+            ImageLoaderL=new ImageLoader(getApplicationContext());
+            ImageLoaderR=new ImageLoader(getApplicationContext());
             try {
 
                 jObj = new JSONObject(result);
@@ -180,7 +185,7 @@ public class ViewActivity extends Activity  implements View.OnClickListener {
                 jaError = jObj.getJSONArray("error");
                 JSONObject joCCError = jaError.getJSONObject(0);
                 strError = joCCError.getString("status");
-             //   Toast.makeText(getBaseContext(), "Received! "+strError, Toast.LENGTH_LONG).show();
+//                Toast.makeText(getBaseContext(), "Received! "+strError, Toast.LENGTH_LONG).show();
 
                 if (strError.equals("none")) {
                     jaCompare = jObj.getJSONArray("compare");
@@ -229,86 +234,94 @@ public class ViewActivity extends Activity  implements View.OnClickListener {
                     }
                     int iall_voite = ivoiteLeft+ ivoiteRight;
                     String all_voite = Integer.toString(iall_voite);
-                    ImageLoader imgLoaderLeft = new ImageLoader(getApplicationContext());
-//                    if (pathLeft.equals("empty")) {
-//                        pathLeft = "empty.png";
+
+//                    ImageLoader imgLoaderLeft = new ImageLoader(getApplicationContext());
+                    int img = R.drawable.abc_ic_clear_mtrl_alpha;
+                    ImageLoaderL.DisplayImage("http://95.78.234.20:81/atest/"+pathLeft, img, ivLeft,0);
+                    ImageLoaderR.DisplayImage("http://95.78.234.20:81/atest/"+pathRight, img, ivRight,0);
+////                    if (pathLeft.equals("empty")) {
+////                        pathLeft = "empty.png";
+////                    }
+//
+////            Toast.makeText(getBaseContext(), "imgOrientation_left = "+orientationLeft,
+////                    Toast.LENGTH_SHORT).show();
+////            Toast.makeText(getBaseContext(), "imgOrientation_right = "+orientationRight,
+////                    Toast.LENGTH_SHORT).show();
+//                    int imgOrientation_left_i = 1;
+//                    try {
+//                        imgOrientation_left_i = Integer.parseInt(orientationLeft);
+//                    } catch(NumberFormatException nfe) {
+//                        System.out.println("Could not parse " + orientationLeft);
 //                    }
-
-//            Toast.makeText(getBaseContext(), "imgOrientation_left = "+orientationLeft,
-//                    Toast.LENGTH_SHORT).show();
-//            Toast.makeText(getBaseContext(), "imgOrientation_right = "+orientationRight,
-//                    Toast.LENGTH_SHORT).show();
-                    int imgOrientation_left_i = 1;
-                    try {
-                        imgOrientation_left_i = Integer.parseInt(orientationLeft);
-                    } catch(NumberFormatException nfe) {
-                        System.out.println("Could not parse " + orientationLeft);
-                    }
-                    int imgOrientation_right_i = 1;
-                    try {
-                        imgOrientation_right_i = Integer.parseInt(orientationRight);
-                    } catch(NumberFormatException nfe) {
-                        System.out.println("Could not parse " + orientationRight);
-                    }
-                    Bitmap rotatedBitmap;
-                    Bitmap bitmap = imgLoaderLeft.getBitmap("http://95.78.234.20:81/atest/" + pathLeft);
-                    try {
-                        if(1 !=imgOrientation_left_i){
-                            Matrix matrix = new Matrix();
-                            matrix.postRotate(0);
-                            if(6 ==imgOrientation_left_i){
-                                matrix.postRotate(90);
-                            }
-                            if(3 ==imgOrientation_left_i){
-                                matrix.postRotate(180);
-                            }
-                            if(8 ==imgOrientation_left_i){
-                                matrix.postRotate(270);
-                            }
-                            rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                            bitmap = rotatedBitmap;
-                        }
-                    }catch (Exception e){
-
-//            Toast.makeText(CreateActivity.this, "orientation = "+orientation,
-//                    Toast.LENGTH_SHORT).show();
-                    }
-                    ivLeft.setImageBitmap(bitmap);
-
-                    ImageLoader imgLoaderRight = new ImageLoader(getApplicationContext());
-//                    if (pathRight.equals("empty")) {
-//                        pathRight = "empty.png";
+//                    int imgOrientation_right_i = 1;
+//                    try {
+//                        imgOrientation_right_i = Integer.parseInt(orientationRight);
+//                    } catch(NumberFormatException nfe) {
+//                        System.out.println("Could not parse " + orientationRight);
 //                    }
+//                    Bitmap rotatedBitmap;
+//
+////                Toast.makeText(getBaseContext(), "Received! "+strError, Toast.LENGTH_LONG).show();
+////            Toast.makeText(ViewActivity.this, "pathLeft = "+pathLeft,
+////                    Toast.LENGTH_SHORT).show();
+//                    Bitmap bitmap = imgLoaderLeft.getBitmap("http://95.78.234.20:81/atest/" + pathLeft);
+//                    try {
+//                        if(1 !=imgOrientation_left_i){
+//                            Matrix matrix = new Matrix();
+//                            matrix.postRotate(0);
+//                            if(6 ==imgOrientation_left_i){
+//                                matrix.postRotate(90);
+//                            }
+//                            if(3 ==imgOrientation_left_i){
+//                                matrix.postRotate(180);
+//                            }
+//                            if(8 ==imgOrientation_left_i){
+//                                matrix.postRotate(270);
+//                            }
+//                            rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+//                            bitmap = rotatedBitmap;
+//                        }
+//                    }catch (Exception e){
+//
+////            Toast.makeText(CreateActivity.this, "orientation = "+orientation,
+////                    Toast.LENGTH_SHORT).show();
+//                    }
+//                    ivLeft.setImageBitmap(bitmap);
+//
+//                    ImageLoader imgLoaderRight = new ImageLoader(getApplicationContext());
+////                    if (pathRight.equals("empty")) {
+////                        pathRight = "empty.png";
+////                    }
 
-                    bitmap = imgLoaderRight.getBitmap("http://95.78.234.20:81/atest/" + pathRight);
-                    try {
-                        if(1 !=imgOrientation_right_i){
-                            Matrix matrixR = new Matrix();
-                            matrixR.postRotate(0);
-                            if(6 ==imgOrientation_right_i){
-                                matrixR.postRotate(90);
-                            }
-                            if(3 ==imgOrientation_right_i){
-                                matrixR.postRotate(180);
-                            }
-                            if(8 ==imgOrientation_right_i){
-                                matrixR.postRotate(270);
-                            }
-                            rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrixR, true);
-                            bitmap = rotatedBitmap;
-                        }
-                    }catch (Exception e){
-
-//            Toast.makeText(CreateActivity.this, "orientation = "+orientation,
-//                    Toast.LENGTH_SHORT).show();
-                    }
-                    ivRight.setImageBitmap(bitmap);
-
-//                    TextView tvCid = (TextView) view.findViewById(R.id.btnVoiteLeft);
-//                    String strCid = btnVoiteLeft.getText().toString();
-//                    tvVoiteLeft
-//                    btnVoiteLeft.setText("Я за эту - ("+voiteLeft+" из "+all_voite+")");
-//                    btnVoiteRight.setText("А Я за эту - ("+voiteRight+" из "+all_voite+")");
+//                    bitmap = imgLoaderRight.getBitmap("http://95.78.234.20:81/atest/" + pathRight);
+//                    try {
+//                        if(1 !=imgOrientation_right_i){
+//                            Matrix matrixR = new Matrix();
+//                            matrixR.postRotate(0);
+//                            if(6 ==imgOrientation_right_i){
+//                                matrixR.postRotate(90);
+//                            }
+//                            if(3 ==imgOrientation_right_i){
+//                                matrixR.postRotate(180);
+//                            }
+//                            if(8 ==imgOrientation_right_i){
+//                                matrixR.postRotate(270);
+//                            }
+//                            rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrixR, true);
+//                            bitmap = rotatedBitmap;
+//                        }
+//                    }catch (Exception e){
+//
+////            Toast.makeText(CreateActivity.this, "orientation = "+orientation,
+////                    Toast.LENGTH_SHORT).show();
+//                    }
+//                    ivRight.setImageBitmap(bitmap);
+//
+////                    TextView tvCid = (TextView) view.findViewById(R.id.btnVoiteLeft);
+////                    String strCid = btnVoiteLeft.getText().toString();
+////                    tvVoiteLeft
+////                    btnVoiteLeft.setText("Я за эту - ("+voiteLeft+" из "+all_voite+")");
+////                    btnVoiteRight.setText("А Я за эту - ("+voiteRight+" из "+all_voite+")");
                     tvVoiteLeft.setText(voiteLeft+" из "+all_voite);
                     tvVoiteRight.setText(voiteRight+" из "+all_voite);
 

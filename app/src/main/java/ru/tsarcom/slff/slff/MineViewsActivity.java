@@ -152,7 +152,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         db_MC.open();
         String max_id = db_MC.getLastIdMC();
 
-        Toast.makeText(getBaseContext(), "max_id = "+max_id, Toast.LENGTH_LONG).show();
+//        Toast.makeText(getBaseContext(), "max_id = "+max_id, Toast.LENGTH_LONG).show();
         if(isConnected()) {
             String url0;
             url0 = "http://95.78.234.20:81/atest/jsonMine.php?id_account="+id_account+"&max_mcid="+max_id;
@@ -181,6 +181,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 
                 TextView tvCid = (TextView) view.findViewById(R.id.tvCid);
                 String strCid = tvCid.getText().toString();
+//                Toast.makeText(getBaseContext(), "strCid = "+strCid, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(activity, ViewActivity.class);
                 intent.putExtra("id_account", id_account);
                 intent.putExtra("id_compare", strCid);
@@ -447,7 +448,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
     }
     public void onBackPressed() {
         // вызываем диалог
-        Toast.makeText(getBaseContext(), "выход", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getBaseContext(), "выход", Toast.LENGTH_LONG).show();
 //        super.finish();
         finish();
 //        showDialog(DIALOG_EXIT);
