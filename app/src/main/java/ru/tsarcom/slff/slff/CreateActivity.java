@@ -44,6 +44,7 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
     Intent intent;
     String id_account;
     String id_compare;
+    int id_compare_int;
     String strError;
     JSONObject jObj = null;
     JSONArray jaAccount = null;
@@ -66,6 +67,8 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
     String imageLR;
     ImageView img,ivLeft,ivRight;
     ImageButton imageButton;
+    DB_MineCompare db_MC;
+    CreateActivity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +77,12 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
         Intent intent = getIntent();
         id_account = intent.getStringExtra("id_account");
         id_compare = intent.getStringExtra("id_compare");
-
+        activity = this;
+        try {
+            id_compare_int = Integer.parseInt(id_compare);
+        } catch(NumberFormatException nfe) {
+            System.out.println("Could not parse " + id_compare);
+        }
         TextView tvCreateID = (TextView)findViewById(R.id.textView);
         tvCreateID.setText(tvCreateID.getText()+"  # "+id_compare);
 //      textView
@@ -315,7 +323,7 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
                 // Convert the InputStream into a string
 
                 InputStream response = conn.getInputStream();
-                String jsonReply;
+                final String jsonReply;
 //                String convertStreamToString(InputStream is) {
 
                     BufferedReader reader = new BufferedReader(new InputStreamReader(response));
@@ -337,15 +345,15 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
                     }
                 jsonReply = sb.toString();
 
-                final String serverJSON;
-                serverJSON = jsonReply;
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(CreateActivity.this,"serverJSON-" + serverJSON + "-",
-                                Toast.LENGTH_SHORT).show();
-                            messageText.setText(serverJSON);
-                    }
-                });
+                final String serverContent;
+                serverContent = jsonReply;
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+////                        Toast.makeText(CreateActivity.this,"serverContent-" + serverContent + "-",
+////                                Toast.LENGTH_SHORT).show();
+////                            messageText.setText(serverContent);
+//                    }
+//                });
 
                 Log.i("uploadFile", "HTTP Response is : "
                         + serverResponseMessage + ": " + serverResponseCode);
@@ -354,14 +362,62 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
 
                     runOnUiThread(new Runnable() {
                         public void run() {
+//                            messageText.setText(serverContent);
 
 //                            String msg = "File Upload Completed.\n\n See uploaded file here : \n\n"
 //                                    +" http://www.androidexample.com/media/uploads/"
 //                                    +uploadFileName;
-//
 //                            messageText.setText(msg);
-                            Toast.makeText(CreateActivity.this,"-" + serverResponseMessage + "- Ваша Selfie загружена",
-                                    Toast.LENGTH_SHORT).show();
+
+                            try {
+                                JSONObject jCCObj = null;
+                                JSONArray jaCCError = null;
+                                JSONArray jaCPhoto = null;
+                                String strCCError;
+                                jCCObj = new JSONObject(serverContent);
+                                // Getting JSON Array
+                                jaCCError = jCCObj.getJSONArray("error");
+                                JSONObject joCCError = jaCCError.getJSONObject(0);
+                                strCCError = joCCError.getString("status");
+                                if (strCCError.equals("none")) {
+                                    jaCPhoto = jCCObj.getJSONArray("photo");
+                                    JSONObject joCCompare = jaCPhoto.getJSONObject(0);
+                                    int id_photo = joCCompare.getInt("id");
+                                    int Orientation = joCCompare.getInt("Orientation");
+                                    String LeftOrRight = joCCompare.getString("LeftOrRight");
+
+//                                    Toast.makeText(CreateActivity.this,"LeftOrRight = " + LeftOrRight + "-",
+//                                            Toast.LENGTH_SHORT).show();
+                                    if (LeftOrRight.equals("Left")) {
+//        // открываем подключение к БД
+                                        db_MC = new DB_MineCompare(activity);
+                                        db_MC.open();
+                                        db_MC.updateLeftMC(id_compare_int, 0,
+                                          id_photo,  Orientation, "uploads/"+id_account+"/"+id_compare+"/"+id_photo+"/img.jpg", 0);
+                                        db_MC.close();
+
+//                                        Toast.makeText(CreateActivity.this,"uploads = " + "uploads/"+id_account+"/"+id_compare+"/"+id_photo+"/img.jpg" + "-",
+//                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                    if (LeftOrRight.equals("Right")) {
+//        // открываем подключение к БД
+                                        db_MC = new DB_MineCompare(activity);
+                                        db_MC.open();
+                                        db_MC.updateRightMC(id_compare_int, 0,
+                                          id_photo,  Orientation, "uploads/"+id_account+"/"+id_compare+"/"+id_photo+"/img.jpg", 0);
+                                        db_MC.close();
+//                                        Toast.makeText(CreateActivity.this,"uploads = " + "uploads/"+id_account+"/"+id_compare+"/"+id_photo+"/img.jpg" + "-",
+//                                                Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    Toast.makeText(CreateActivity.this,"-" + serverResponseMessage + "- Ваша Selfie загружена",
+                                            Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(CreateActivity.this,"-" + serverResponseMessage + "- Ошибки при изменении данных загружки",
+                                            Toast.LENGTH_SHORT).show();  }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                 }

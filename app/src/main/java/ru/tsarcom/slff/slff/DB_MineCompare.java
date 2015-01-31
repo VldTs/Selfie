@@ -109,11 +109,47 @@ public class DB_MineCompare {
 //        cv.put(C_MC_DATE_CRT, DATE_CRT);
         cv.put(C_MC_VOITE_LEFT, VOITE_LEFT);
         cv.put(C_MC_VOITE_RIGHT, VOITE_RIGHT);
-        cv.put(C_MC_PHOTO_LEFT, PHOTO_LEFT);
-        cv.put(C_MC_PHOTO_RIGHT, PHOTO_RIGHT);
+        if(PHOTO_LEFT != -1) {
+            cv.put(C_MC_PHOTO_LEFT, PHOTO_LEFT);
+        }
+        if(PHOTO_LEFT != -1) {
+            cv.put(C_MC_PHOTO_RIGHT, PHOTO_RIGHT);
+        }
         cv.put(C_MC_PATH_LEFT, PATH_LEFT);
         cv.put(C_MC_PATH_RIGHT, PATH_RIGHT);
         cv.put(C_MC_ORNT_LEFT, ORNT_LEFT);
+        cv.put(C_MC_ORNT_RIGHT, ORNT_RIGHT);
+        cv.put(C_MC_STATUS, STATUS);
+
+        // updating row
+        return mDB.update(DBT_MC, cv, C_MC_CID + " = " + CID,
+                null);
+    }
+    // Updating single contact
+    public int updateLeftMC(int CID, int VOITE_LEFT,  int PHOTO_LEFT,
+                             int ORNT_LEFT,  String PATH_LEFT,   int STATUS) {
+
+
+        ContentValues cv = new ContentValues();
+        cv.put(C_MC_VOITE_LEFT, VOITE_LEFT);
+        cv.put(C_MC_PHOTO_LEFT, PHOTO_LEFT);
+        cv.put(C_MC_PATH_LEFT, PATH_LEFT);
+        cv.put(C_MC_ORNT_LEFT, ORNT_LEFT);
+        cv.put(C_MC_STATUS, STATUS);
+
+        // updating row
+        return mDB.update(DBT_MC, cv, C_MC_CID + " = " + CID,
+                null);
+    }
+    // Updating single contact
+    public int updateRightMC(int CID, int VOITE_RIGHT,  int PHOTO_RIGHT,
+                              int ORNT_RIGHT,  String PATH_RIGHT,  int STATUS) {
+
+
+        ContentValues cv = new ContentValues();
+        cv.put(C_MC_VOITE_RIGHT, VOITE_RIGHT);
+        cv.put(C_MC_PHOTO_RIGHT, PHOTO_RIGHT);
+        cv.put(C_MC_PATH_RIGHT, PATH_RIGHT);
         cv.put(C_MC_ORNT_RIGHT, ORNT_RIGHT);
         cv.put(C_MC_STATUS, STATUS);
 
