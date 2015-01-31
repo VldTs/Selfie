@@ -94,6 +94,7 @@ public class ImageLoaderSmallAndSave {
     }
     public Bitmap getBitmapWeb(String url, File dpath, String fname)
     {
+        fname = "s"+fname;
         File f=fileCache.getFileAndSave(url, dpath, fname);
 
         //from SD cache

@@ -147,92 +147,6 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         String fileName = intent.getStringExtra(FILE_NAME);
         activity = this;
 
-
-        File pathf;
-        String path;
-        String fname;
-        pathf = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-/*
-
-        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
-            pathf=new File(android.os.Environment.getExternalStorageDirectory(),"sssss");
-        else
-            pathf=getCacheDir();
-        if(!pathf.exists())
-            pathf.mkdirs();
-//        pathf = new File(pathf.getAbsolutePath() + "/" + "tttt");
-//        // создаем каталог
-//        pathf.mkdirs();
-        path = baseDir.getPath();
-        path = pathf.getPath();
-        path = path + "";
-//        File file = new File(path, "savedBitmap3_2.png");
-
-        Toast.makeText(getBaseContext(), "00000 path = "+path, Toast.LENGTH_LONG).show();
-        Bitmap bitmap0;
-        Bitmap bitmap;
-        Paint paint;
-//        String url ="http://95.78.234.20:81/atest/uploads/3/114/83/img.jpg";
-        String url ="http://95.78.234.20:81/atest/uploads/3/112/79/img.jpg";
-
-//        public Bitmap getBitmap(String url);
-
-        ImageLoaderSmall0 = new ImageLoaderSmall(getApplicationContext());
-        fname = "11";
-        bitmap0 = ImageLoaderSmall0.getBitmapWeb(url,pathf,fname);
-        if (null ==bitmap0){
-
-            Toast.makeText(getBaseContext(), "bitmap0 = null"+path, Toast.LENGTH_LONG).show();
-        }
-        bitmap = bitmap0;
-        */
-//        bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.RGB_565);
-//        MemoryCache memoryCache=new MemoryCache();
-//        Bitmap bitmap=memoryCache.get(url);
-//        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//        paint.setTextSize(40);
-//
-//        Bitmap bmpIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-//        bmpIcon = Bitmap.createScaledBitmap(bmpIcon, 500, 500, true);
-//
-//        bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.RGB_565);
-//        Canvas canvas = new Canvas(bitmap);
-//        canvas.drawColor(Color.WHITE);
-//        canvas.drawBitmap(bmpIcon, 0,0, paint);
-//        canvas.drawText("Saved bitmap", 100, 50, paint);
-
-//        try {
-//            // отрываем поток для записи
-//            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-//                    openFileOutput("FILENAME", MODE_PRIVATE)));
-//            // пишем данные
-//            bw.write("Содержимое файла");
-//            // закрываем поток
-//            bw.close();
-////            Log.d(LOG_TAG, "Файл записан");
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            FileOutputStream fos = null;
-//            try {
-//                fos = new FileOutputStream(file);
-//                Toast.makeText(getBaseContext(), "FileOutputStream", Toast.LENGTH_LONG).show();
-//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-//                Toast.makeText(getBaseContext(), "----- файл сохранён компресс", Toast.LENGTH_LONG).show();
-//            } finally {
-//                if (fos != null){
-//                    Toast.makeText(getBaseContext(), "файл сохранён ", Toast.LENGTH_LONG).show();
-//                    fos.close();
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-
 //        // открываем подключение к БД
         db_MC = new DB_MineCompare(this);
         db_MC.open();
@@ -340,7 +254,6 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                     urlCC = "http://95.78.234.20:81/atest/jsonCreateCompare.php?id_account="+id_account;
                     new CreateCompareHttpAsyncTask().execute(urlCC);
                 }else{
-
                     Toast.makeText(getBaseContext(), "Нет Соединения с интернетом :(", Toast.LENGTH_LONG).show();
                 }
                 break;
@@ -358,8 +271,6 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         @Override
         protected void onPostExecute(String result) {
             //   Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
-
-
 
             try {
                 jObj = new JSONObject(result);
@@ -469,10 +380,14 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 if (strCCError.equals("none")) {
                     jaCCompare = jCCObj.getJSONArray("compare");
                     JSONObject joCCompare = jaCCompare.getJSONObject(0);
-                    String id_compare = joCCompare.getString("id");
+                    int id_compare = joCCompare.getInt("id");
+                    String id_compare_s = joCCompare.getString("id");
+                    String date_crt = joCCompare.getString("date_crt");
 
+                    db_MC.addRecMC(id_compare, date_crt, 0 ,0 ,
+                            0, 0, 0, 0, "", "", 0);
                     intent = new Intent(activity, createActivityClass);
-                    intent.putExtra("id_compare", id_compare);
+                    intent.putExtra("id_compare", id_compare_s);
                     intent.putExtra("id_account", id_account);
                     startActivity(intent);
 
@@ -641,6 +556,23 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
             mContext = context;
             inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             ImageLoaderSmallAndSave=new ImageLoaderSmallAndSave(mContext.getApplicationContext());
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (!mDataValid) {
+                throw new IllegalStateException("this should only be called when the cursor is valid");
+            }
+            if (!mCursor.moveToPosition(position)) {
+                throw new IllegalStateException("couldn't move cursor to position " + position);
+            }
+            View v;
+            if (convertView == null) {
+                v = newView(mContext, mCursor, parent);
+            } else {
+                v = convertView;
+            }
+            bindView(v, mContext, mCursor);
+            return v;
         }
         @Override
         public void bindView(View v, Context context, Cursor c) {

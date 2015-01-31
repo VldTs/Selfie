@@ -24,10 +24,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -72,8 +77,7 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
 
         TextView tvCreateID = (TextView)findViewById(R.id.textView);
         tvCreateID.setText(tvCreateID.getText()+"  # "+id_compare);
-//        textView
-
+//      textView
 
         btnOthers = (Button) findViewById(R.id.btnOthers);
         btnOthers.setOnClickListener(this);
@@ -305,7 +309,43 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
 
                 // Responses from the server (code and message)
                 serverResponseCode = conn.getResponseCode();
-                String serverResponseMessage = conn.getResponseMessage();
+
+                final String serverResponseMessage = conn.getResponseMessage();
+
+                // Convert the InputStream into a string
+
+                InputStream response = conn.getInputStream();
+                String jsonReply;
+//                String convertStreamToString(InputStream is) {
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(response));
+                    StringBuilder sb = new StringBuilder();
+
+                    String line = null;
+                    try {
+                        while ((line = reader.readLine()) != null) {
+                            sb.append(line + "\n");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            response.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                jsonReply = sb.toString();
+
+                final String serverJSON;
+                serverJSON = jsonReply;
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(CreateActivity.this,"serverJSON-" + serverJSON + "-",
+                                Toast.LENGTH_SHORT).show();
+                            messageText.setText(serverJSON);
+                    }
+                });
 
                 Log.i("uploadFile", "HTTP Response is : "
                         + serverResponseMessage + ": " + serverResponseCode);
@@ -320,7 +360,7 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
 //                                    +uploadFileName;
 //
 //                            messageText.setText(msg);
-                            Toast.makeText(CreateActivity.this, "Ваша Selfie загружена",
+                            Toast.makeText(CreateActivity.this,"-" + serverResponseMessage + "- Ваша Selfie загружена",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -365,7 +405,7 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
 
         } // End else block
     }
-// ---------------
+    // ---------------
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
