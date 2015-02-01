@@ -6,7 +6,8 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
-    tools:context="ru.tsarcom.selfie.LoginActivity">
+    tools:context="ru.tsarcom.selfie.LoginActivity"
+    android:background="@drawable/wp_1">
 
     <LinearLayout
         android:orientation="vertical"

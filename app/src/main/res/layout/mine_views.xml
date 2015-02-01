@@ -7,7 +7,7 @@
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
     tools:context="ru.tsarcom.selfie.LoginActivity"
-    android:background="@drawable/retrostyle">
+    android:background="@drawable/wp_1">
 
     <LinearLayout
         android:orientation="vertical"

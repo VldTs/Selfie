@@ -50,13 +50,6 @@
             android:text="опубликовать"
             android:id="@+id/btnShare" />
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="..."
-            android:id="@+id/messageText"
-            android:textSize="14dp" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -68,19 +61,45 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
-                <ImageView
-                    android:layout_width="380dp"
-                    android:layout_height="380dp"
-                    android:id="@+id/ivLeft"
-                    android:src="@drawable/plus_left"
-                    android:layout_gravity="center" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
 
-                <ImageView
-                    android:layout_width="380dp"
-                    android:layout_height="380dp"
-                    android:id="@+id/ivRight"
-                    android:src="@drawable/plus_right"
-                    android:layout_gravity="center" />
+                    <ImageView
+                        android:layout_width="380dp"
+                        android:layout_height="380dp"
+                        android:id="@+id/ivLeft"
+                        android:src="@drawable/plus_left"
+                        android:layout_gravity="center" />
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="CAMERA"
+                        android:onClick="onClickCameraLeft"
+                        android:id="@+id/btnCameraLeft" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <ImageView
+                        android:layout_width="380dp"
+                        android:layout_height="380dp"
+                        android:id="@+id/ivRight"
+                        android:src="@drawable/plus_right"
+                        android:layout_gravity="center" />
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="CAMERA"
+                        android:onClick="onClickCameraRight"
+                        android:id="@+id/btnCameraRight" />
+                </LinearLayout>
+
             </LinearLayout>
         </HorizontalScrollView>
 

@@ -11,6 +11,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -40,7 +41,7 @@ import java.net.URL;
 import ru.tsarcom.slff.slff.R;
 
 public class CreateActivity extends Activity  implements View.OnClickListener {
-    Button btnOthers,btnMine, btnShare;
+    Button btnOthers,btnMine, btnShare, btnCamera;
     Intent intent;
     String id_account;
     String id_compare;
@@ -50,7 +51,7 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
     JSONArray jaAccount = null;
     JSONArray jaError = null;
     JSONArray jaCompare = null;
-    private static final int SELECT_PICTURE = 1;
+    private static final int SELECT_PICTURE = 301;
     private String selectedImagePath;
 
     TextView messageText;
@@ -69,11 +70,26 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
     ImageButton imageButton;
     DB_MineCompare db_MC;
     CreateActivity activity;
+
+    File directory;
+    final int TYPE_PHOTO = 1;
+    final int TYPE_VIDEO = 2;
+
+    final int REQUEST_CODE_PHOTO = 101;
+    final int REQUEST_CODE_VIDEO = 102;
+
+//    ImageView ivPhoto;
+    final String TAG = "myLogs";
+
+    Uri selectedImageUriCamera;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create);
 
+        createDirectory();
+//        ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
         Intent intent = getIntent();
         id_account = intent.getStringExtra("id_account");
         id_compare = intent.getStringExtra("id_compare");
@@ -93,12 +109,14 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
         btnMine.setOnClickListener(this);
         btnShare = (Button) findViewById(R.id.btnShare);
         btnShare.setOnClickListener(this);
+//        btnCamera = (Button) findViewById(R.id.btnCamera);
+//        btnCamera.setOnClickListener(this);
 
         ivLeft= (ImageView)findViewById(R.id.ivLeft);
         ivRight= (ImageView)findViewById(R.id.ivRight);
 
 
-        messageText  = (TextView)findViewById(R.id.messageText);
+//        messageText  = (TextView)findViewById(R.id.messageText);
         upLoadServerUri = "http://95.78.234.20:81/atest/upload.php?id_account="+id_account+"&id_compare="+id_compare;
         // load from galary for left image
         ((ImageView) findViewById(R.id.ivLeft))
@@ -131,6 +149,24 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
                     }
                 });
     }
+
+
+
+
+    public void onClickCameraLeft(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, generateFileUri(TYPE_PHOTO));
+        startActivityForResult(intent, REQUEST_CODE_PHOTO);
+        img = ivLeft;
+        imageLR = "Left";
+    }
+    public void onClickCameraRight(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, generateFileUri(TYPE_PHOTO));
+        startActivityForResult(intent, REQUEST_CODE_PHOTO);
+        img = ivRight;
+        imageLR = "Right";
+    }
     //decodes image and scales it to reduce memory consumption
     private Bitmap decodeFile(File f){
         try {
@@ -140,7 +176,7 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
             BitmapFactory.decodeStream(new FileInputStream(f),null,o);
 
             //The new size we want to scale to
-            final int REQUIRED_SIZE=340;
+            final int REQUIRED_SIZE=200;
 
             //Find the correct scale value. It should be the power of 2.
             int scale=1;
@@ -156,13 +192,6 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
     }
     public void setImageForMI(){
 
-//        Bitmap bm0 = BitmapFactory.decodeFile(selectedImagePath);
-
-//        Bitmap bm = decodeFile(bm0);
-        // сжимание
-//        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//        bm.compress(Bitmap.CompressFormat.JPEG, 20, stream);
-
         File file=new File(selectedImagePath);
 
         Bitmap bm = decodeFile(file);
@@ -170,17 +199,10 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
             ExifInterface exif = new ExifInterface(selectedImagePath);
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
             if(1 !=orientation){
-                Matrix matrix = new Matrix();
-                matrix.postRotate(0);
-                if(6 ==orientation){
-                    matrix.postRotate(90);
-                }
-                if(3 ==orientation){
-                    matrix.postRotate(180);
-                }
-                if(8 ==orientation){
-                    matrix.postRotate(270);
-                }
+                Matrix matrix = new Matrix();           matrix.postRotate(0);
+                if(6 ==orientation){                    matrix.postRotate(90);                }
+                if(3 ==orientation){                    matrix.postRotate(180);                }
+                if(8 ==orientation){                    matrix.postRotate(270);                }
                 imageOrient =orientation;
                 Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
                 bm = rotatedBitmap;
@@ -191,27 +213,69 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
             Toast.makeText(CreateActivity.this, "не получисось считать orientation",
                     Toast.LENGTH_SHORT).show();
         }
-        img.setImageBitmap(bm);
+
+        final Bitmap finalBm = bm;
+        new Thread(new Runnable() {
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        img.setImageBitmap(finalBm);
+                    }
+                });
+            }
+        }).start();
         dialog = ProgressDialog.show(CreateActivity.this, "", "Загрузка файла...", true);
         new Thread(new Runnable() {
             public void run() {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        messageText.setText("Загрузка начата.....");
+//                        messageText.setText("Загрузка начата.....");
                     }
                 });
                 uploadFile(selectedImagePath,imageOrient, imageLR);
             }
         }).start();
     }
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,  Intent intent) {
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
-                Uri selectedImageUri = data.getData();
-                selectedImagePath = getPath(selectedImageUri);
-                setImageForMI();
+                if (intent == null) {
+                    Log.d(TAG, "Intent is null");
+                } else {
+                    Uri selectedImageUri = intent.getData();
+                    selectedImagePath = getPath(selectedImageUri);
+                    setImageForMI();
+                }
             }
         }
+
+        if (requestCode == REQUEST_CODE_PHOTO) {
+            if (resultCode == RESULT_OK) {
+                if (intent == null) {
+                    Log.d(TAG, "Intent is null");
+                } else {
+                    Log.d(TAG, "Photo uri: " + intent.getData());
+                    selectedImageUriCamera = intent.getData();
+//                    Bundle bndl = intent.getExtras();
+//                    if (bndl != null) {
+//                        Object obj = intent.getExtras().get("data");
+//                        if (obj instanceof Bitmap) {
+//                            Bitmap bitmap = (Bitmap) obj;
+//                            Log.d(TAG, "bitmap " + bitmap.getWidth() + " x " + bitmap.getHeight());
+//                            ivPhoto.setImageBitmap(bitmap);
+//                        }
+//                    }
+                    selectedImagePath = getPath(selectedImageUriCamera);
+                    setImageForMI();
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Log.d(TAG, "Canceled");
+            }
+        }
+
     }
     public String getPath(Uri uri) {
 
@@ -475,8 +539,6 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
                 // кнопка
                 intent = new Intent(this, OthersViewsActivity.class);
                 intent.putExtra("id_account", id_account);
-//                intent.putExtra("fname", etEmail.getText().toString());
-//                intent.putExtra("lname", etPass.getText().toString());
                 startActivity(intent);
                 break;
             case R.id.btnShare:
@@ -485,12 +547,41 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
                 url0 = "http://95.78.234.20:81/atest/jsonShareCompare.php?id_compare="+id_compare;
                 new ShareHttpAsyncTask().execute(url0);
                 break;
+//            case R.id.btnCamera:
+//                // кнопка
+//
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////                intent.putExtra(MediaStore.EXTRA_OUTPUT, generateFileUri(TYPE_PHOTO));
+//                startActivityForResult(intent, REQUEST_CODE_PHOTO);
+////                String url0;
+////                url0 = "http://95.78.234.20:81/atest/jsonShareCompare.php?id_compare="+id_compare;
+////                new ShareHttpAsyncTask().execute(url0);
+//                break;
         }
     }
 
     // json
 
+    private Uri generateFileUri(int type) {
+        File file = null;
+        switch (type) {
+            case TYPE_PHOTO:
+                file = new File(directory.getPath() + "/" + "photo_"
+                        + System.currentTimeMillis() + ".jpg");
+                break;
+        }
+        Log.d(TAG, "fileName = " + file);
+        return Uri.fromFile(file);
+    }
 
+    private void createDirectory() {
+        directory = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "MyFolder");
+        if (!directory.exists())
+            directory.mkdirs();
+    }
 
     private class ShareHttpAsyncTask extends AsyncTask<String, Void, String> {
         public String JsonString_t;

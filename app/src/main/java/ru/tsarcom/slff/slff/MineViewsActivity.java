@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -113,6 +114,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
     int loader;
     MineViewsActivity activity;
     Class<CreateActivity> createActivityClass;
+    int strGlobalCid;
 
     private File baseDir;
 
@@ -120,6 +122,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
     ListView lvData;
     DB_MineCompare db_MC;
     SimpleCursorAdapter scAdapter;
+    Cursor cursorGlobal;
 
             public ImageLoaderSmall ImageLoaderSmall0;
 
@@ -426,10 +429,32 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 strCCError = joCCError.getString("status");
                 if (strCCError.equals("none")) {
 
-                    data4list.remove(data4listPosition);
-                    Toast.makeText(getBaseContext(), "data4listPosition = "+data4listPosition, Toast.LENGTH_LONG).show();
+//                    data4list.remove(data4listPosition);
+//                    db_MC.delRec(strGlobalCid);
+//                    Toast.makeText(getBaseContext(), "data4listPosition = "+data4listPosition, Toast.LENGTH_LONG).show();
                     // уведомляем, что данные изменились
-                    sAdapter.notifyDataSetChanged();
+//                    Bundle b=null;
+//                    MineViewsActivity.this.onCreate(b);
+
+                    new Thread(new Runnable() {
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+
+                                    db_MC.delRec(strGlobalCid);
+//                                    cursorGlobal.requery();
+                                    scAdapter.getCursor().requery();
+                                    scAdapter.notifyDataSetChanged();
+
+//                                    Log.d(TAG, "Button Click ");
+//                                    messageText.setText("Загрузка начата.....");
+                                }
+                            });
+//                            uploadFile(selectedImagePath,imageOrient, imageLR);
+                        }
+                    }).start();
+
+
                     Toast.makeText(getBaseContext(), "удалено ваше Selfie :(", Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(getBaseContext(), "простите, не вышло удалить Selfie :(", Toast.LENGTH_LONG).show();
@@ -473,6 +498,13 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         TextView tvCid = (TextView) acmi.targetView.findViewById(R.id.tvCid);
         String strCid = tvCid.getText().toString();
+
+        try {
+            strGlobalCid = Integer.parseInt(strCid);
+        } catch(NumberFormatException nfe) {
+            System.out.println("Could not parse " + strCid);
+        }
+
         switch (item.getItemId()) {
             case MENU_VIEW:
                 // удаляем Map из коллекции, используя позицию пункта в списке
@@ -493,8 +525,9 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 break;
             case MENU_DELETE:
                 data4listPosition = acmi.position;
+//                Toast.makeText(getBaseContext(), "data4listPosition = "+data4listPosition+"  strCid = "+strCid, Toast.LENGTH_LONG).show();
                 String urlCC;
-                urlCC = "http://95.78.234.20:81/atest/jsonDeleteCompare.php?id_compare="+strCid;
+                urlCC = "http://95.78.234.20:81/atest/jsonDeleteCompare.php?id_compare="+strCid+"&id_account="+id_account;
                 new DeleteCompareHttpAsyncTask().execute(urlCC);
                 break;
             case MENU_SIZE_26:
@@ -577,6 +610,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         }
         @Override
         public void bindView(View v, Context context, Cursor c) {
+            cursorGlobal = c;
             int cid = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_CID));
             String cdate = c.getString(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_DATE_CRT));
             int cVoiteLeft = c.getInt(c.getColumnIndexOrThrow(DB_MineCompare.C_MC_VOITE_LEFT));

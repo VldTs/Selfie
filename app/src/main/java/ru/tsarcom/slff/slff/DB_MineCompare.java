@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DB_MineCompare {
 
     private static final String DB_NAME = "SelfyTest4";
-    private static final int DB_VERSION = 28;
+    private static final int DB_VERSION = 29;
 
     private static final String DBT_MC = "my_compare";
 
@@ -70,6 +70,10 @@ public class DB_MineCompare {
         return mDB.query(DBT_MC, null,null, null, null, null,  C_MC_DATE_CRT +" DESC");
     }
 
+        // удалить запись из DB_TABLE
+    public void delRec(long id) {
+        mDB.delete(DBT_MC, C_MC_CID + " = " + id, null);
+    }
     // получить max id из таблицы DBT_MC
     public String getLastIdMC() {
         String qr ="SELECT MAX("+C_MC_CID+") as "+C_MC_CID+" FROM "+DBT_MC;

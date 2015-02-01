@@ -65,7 +65,7 @@ public class ViewActivity extends Activity  implements View.OnClickListener {
         id_account = intent.getStringExtra("id_account");
         id_compare = intent.getStringExtra("id_compare");
 
-        Toast.makeText(getBaseContext(), "id_account = "+id_account+ " id_compare = "+id_compare, Toast.LENGTH_LONG).show();
+//        Toast.makeText(getBaseContext(), "id_account = "+id_account+ " id_compare = "+id_compare, Toast.LENGTH_LONG).show();
 
         ivLeft = (ImageView) findViewById(R.id.ivLeft);
         ivRight = (ImageView) findViewById(R.id.ivRight);
