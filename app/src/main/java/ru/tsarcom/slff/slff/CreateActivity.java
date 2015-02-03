@@ -75,7 +75,8 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
     final int TYPE_PHOTO = 1;
     final int TYPE_VIDEO = 2;
 
-    final int REQUEST_CODE_PHOTO = 101;
+    final int REQUEST_CODE_PHOTO_L = 111;
+    final int REQUEST_CODE_PHOTO_R = 112;
     final int REQUEST_CODE_VIDEO = 102;
 
 //    ImageView ivPhoto;
@@ -156,16 +157,16 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
     public void onClickCameraLeft(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //        intent.putExtra(MediaStore.EXTRA_OUTPUT, generateFileUri(TYPE_PHOTO));
-        startActivityForResult(intent, REQUEST_CODE_PHOTO);
-        img = ivLeft;
-        imageLR = "Left";
+        startActivityForResult(intent, REQUEST_CODE_PHOTO_L);
+//        img = ivLeft;
+//        imageLR = "Left";
     }
     public void onClickCameraRight(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //        intent.putExtra(MediaStore.EXTRA_OUTPUT, generateFileUri(TYPE_PHOTO));
-        startActivityForResult(intent, REQUEST_CODE_PHOTO);
-        img = ivRight;
-        imageLR = "Right";
+        startActivityForResult(intent, REQUEST_CODE_PHOTO_R);
+//        img = ivRight;
+//        imageLR = "Right";
     }
     //decodes image and scales it to reduce memory consumption
     private Bitmap decodeFile(File f){
@@ -252,7 +253,7 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
             }
         }
 
-        if (requestCode == REQUEST_CODE_PHOTO) {
+        if (requestCode == REQUEST_CODE_PHOTO_L) {
             if (resultCode == RESULT_OK) {
                 if (intent == null) {
                     Log.d(TAG, "Intent is null");
@@ -268,6 +269,24 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
 //                            ivPhoto.setImageBitmap(bitmap);
 //                        }
 //                    }
+                    img = ivLeft;
+                    imageLR = "Left";
+                    selectedImagePath = getPath(selectedImageUriCamera);
+                    setImageForMI();
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Log.d(TAG, "Canceled");
+            }
+        }
+        if (requestCode == REQUEST_CODE_PHOTO_R) {
+            if (resultCode == RESULT_OK) {
+                if (intent == null) {
+                    Log.d(TAG, "Intent is null");
+                } else {
+                    Log.d(TAG, "Photo uri: " + intent.getData());
+                    selectedImageUriCamera = intent.getData();
+                    img = ivRight;
+                    imageLR = "Right";
                     selectedImagePath = getPath(selectedImageUriCamera);
                     setImageForMI();
                 }

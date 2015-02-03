@@ -47,7 +47,7 @@ public class ImageLoaderSmallAndSave {
             BitmapFactory.decodeStream(new FileInputStream(f),null,o);
  
             //Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE=50;
+            final int REQUIRED_SIZE=150;
             int width_tmp=o.outWidth, height_tmp=o.outHeight;
             int scale=1;
             while(true){
