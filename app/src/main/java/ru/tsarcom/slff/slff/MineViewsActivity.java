@@ -2,9 +2,11 @@ package ru.tsarcom.slff.slff;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -121,11 +123,19 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
     private static final int CM_DELETE_ID = 1;
     ListView lvData;
     DB_MineCompare db_MC;
-    SimpleCursorAdapter scAdapter;
+//    public static SimpleCursorAdapter scAdapter;
+    public static MySimpleCursorAdapter scAdapter;
+//    private static MySimpleCursorAdapter scAdapter;
     Cursor cursorGlobal;
 
+    BroadcastReceiver br;
+
+    public final static String BROADCAST_ACTION = "ru.tsarcom.slff.slff";
             public ImageLoaderSmall ImageLoaderSmall0;
 
+    @Deprecated
+    public static final int FLAG_AUTO_REQUERY = 0x01;
+    public static final int FLAG_REGISTER_CONTENT_OBSERVER = 0x02;
 //    ProgressDialog progress;
 //    @BeforeCreate
 //    public void getProgressDialog(){
@@ -206,13 +216,83 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         };
 
         // создааем адаптер и настраиваем список
-        scAdapter = new MySimpleCursorAdapter(this, R.layout.mine_list_view_cursor, null, from, to, 0);
+        scAdapter = new MySimpleCursorAdapter(this, R.layout.mine_list_view_cursor, null, from, to, FLAG_AUTO_REQUERY);
+//        scAdapter = new MySimpleCursorAdapter(this, R.layout.mine_list_view_cursor, null, from, to, FLAG_REGISTER_CONTENT_OBSERVER);
         lvSimple.setAdapter(scAdapter);
         // создаем лоадер для чтения данных
         getSupportLoaderManager().initLoader(0, null, this);
+//        getSupportLoaderManager().restartLoader(0, null, this);
+//        android.content.Loader<Object> objectLoader = getLoaderManager().restartLoader(0, null, this);
 
+        // создаем BroadcastReceiver
+        br = new BroadcastReceiver() {
+            // действия при получении сообщений
+            public void onReceive(Context context, Intent intent) {
+                int task = intent.getIntExtra("PARAM_TASK", 0);
+                int status = intent.getIntExtra("PARAM_STATUS", 0);
+                Log.d(LOG_TAG, "onReceive: task = " + task + ", status = " + status);
 
+                Toast.makeText(getBaseContext(), "BroadcastReceiver ", Toast.LENGTH_LONG).show();
+
+                getSupportLoaderManager().restartLoader(0, null, activity);
+                // Ловим сообщения о старте задач
+                if (status  == 100) {//STATUS_START
+                    switch (task) {
+                        case 1:
+//                Toast.makeText(getBaseContext(), "strCid = "+strCid, Toast.LENGTH_LONG).show();
+//                            tvTask1.setText("Task1 start");
+                            break;
+//                        case TASK2_CODE:
+//                            tvTask2.setText("Task2 start");
+//                            break;
+//                        case TASK3_CODE:
+//                            tvTask3.setText("Task3 start");
+//                            break;
+                    }
+                }
+
+//                // Ловим сообщения об окончании задач
+//                if (status == STATUS_FINISH) {
+//                    int result = intent.getIntExtra(PARAM_RESULT, 0);
+//                    switch (task) {
+//                        case TASK1_CODE:
+//                            tvTask1.setText("Task1 finish, result = " + result);
+//                            break;
+//                        case TASK2_CODE:
+//                            tvTask2.setText("Task2 finish, result = " + result);
+//                            break;
+//                        case TASK3_CODE:
+//                            tvTask3.setText("Task3 finish, result = " + result);
+//                            break;
+//                    }
+//                }
+            }
+        };
+        // создаем фильтр для BroadcastReceiver
+        IntentFilter intFilt = new IntentFilter(BROADCAST_ACTION);
+        // регистрируем (включаем) BroadcastReceiver
+        registerReceiver(br, intFilt);
     }
+public static void update(){
+    scAdapter.notifyDataSetChanged();
+//        getSupportLoaderManager().restartLoader(0, null, this);
+}
+
+//    @Override
+//    public synchronized void onStart(Intent intent, int startId) {
+//        super.onStart(intent, startId);
+//
+//
+//        if(!isRunning){
+//            mythread.start();
+//            isRunning = true;
+//        }
+//    }
+//    if(!isRunning){
+//        mythread.start();
+//        isRunning = true;
+//    }
+
     // check network connection
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
@@ -544,18 +624,38 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         db_MC.close();
     }
 
+//    @Override
+//    public Loader<Cursor> onCreateLoader(int id, Bundle bndl) {
+//        return new MyCursorLoader(this, db_MC);
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+//        scAdapter.swapCursor(cursor);
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<Cursor> loader) {
+//    }
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle bndl) {
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//        CursorLoader cursorLoader =
+//                new CursorLoader(this,
+//                        YOUR_URI,
+//                        YOUR_PROJECTION, null, null, null);
+//        return cursorLoader;
+
         return new MyCursorLoader(this, db_MC);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        scAdapter.swapCursor(cursor);
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        scAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        scAdapter.swapCursor(null);
     }
 
     static class MyCursorLoader extends CursorLoader {
@@ -586,12 +686,22 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         public LayoutInflater inflater=null;
         public MySimpleCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags)
         {
-            super(context, layout, c, from, to,0);
+            super(context, layout, c, from, to,flags);
             mContext = context;
             inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             ImageLoaderSmallAndSave=new ImageLoaderSmallAndSave(mContext.getApplicationContext());
         }
-
+        @Override
+        public void changeCursor(Cursor cursor) {
+            // TODO Auto-generated method stub
+            super.changeCursor(cursor);
+        }
+        // The newView method is used to inflate a new view and return it,
+        // you don't bind any data to the view at this point.
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            return LayoutInflater.from(context).inflate(R.layout.mine_list_view_cursor, parent, false);
+        }
         public View getView(int position, View convertView, ViewGroup parent) {
             if (!mDataValid) {
                 throw new IllegalStateException("this should only be called when the cursor is valid");

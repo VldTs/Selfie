@@ -57,6 +57,10 @@
             android:name="ru.tsarcom.slff.slff.SelfieServiceF"
             android:enabled="true" >
         </service>
+        <service
+            android:name="ru.tsarcom.slff.slff.SelfieServiceUpVoite"
+            android:enabled="true" >
+        </service>
 
     </application>
 

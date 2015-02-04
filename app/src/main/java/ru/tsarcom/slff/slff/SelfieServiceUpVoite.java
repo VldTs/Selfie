@@ -28,13 +28,25 @@ public class SelfieServiceUpVoite extends Service {
     final String ID_ACCOUNT = "ID_ACCOUNT";
     SharedPreferences sPref;
     JSONArray jaMsg = null;
+    String strMsg;
+
+
+    String strError,strCCError;
     JSONObject jObj = null;
-    String strMsg,strCCError;
+    JSONObject jCCObj = null;
+    JSONArray jaAccount = null;
+    JSONArray jaError = null;
+    JSONArray jaCCError = null;
     JSONArray jaCompare = null;
+    JSONArray jaPhoto = null;
+    JSONArray jaCCompare = null;
     NotificationManager nm;
     SelfieServiceUpVoite thisServise;
     String id_account;
     public String msgService = "--";
+    public int voite;
+    public static final String DATA_INSERTED = "WHATEVER_YOU_WANT";
+    DB_MineCompare db_MC;
     @Override
     public IBinder onBind(Intent arg0) {
         return null;
@@ -44,6 +56,9 @@ public class SelfieServiceUpVoite extends Service {
     public void onCreate() {
         super.onCreate();
 //        Log.d(TAG, "onCreate");
+        voite = 0;
+        db_MC = new DB_MineCompare(this);
+        db_MC.open();
         thisServise = this;
         loadText();
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -72,6 +87,13 @@ public class SelfieServiceUpVoite extends Service {
     @Override
     public synchronized void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
+
+            Message myMessage=new Message();
+            Bundle resBundle = new Bundle();
+            resBundle.putString("status", "SUCCESS");
+            myMessage.obj=resBundle;
+            thisServise.msgService = "---++++---"+id_account;
+            handler.sendMessage(myMessage);
 //        try {
           //  id_account = intent.getStringExtra("id_account");
 //        }
@@ -130,7 +152,7 @@ public class SelfieServiceUpVoite extends Service {
     }
 
     class MyThread extends Thread{
-        static final long DELAY = 20000;
+        static final long DELAY = 10000;
         @Override
         public void run(){
             while(isRunning){
@@ -138,7 +160,20 @@ public class SelfieServiceUpVoite extends Service {
 
                 try {
                     String url0;
-                    url0 = "http://95.78.234.20:81/atest/jsonCheck.php?id_account="+id_account;
+                    url0 = "http://95.78.234.20:81/atest/jsonMineLoadVoite.php?id_account="+id_account;
+//                    Runnable run0 = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            MineViewsActivity.update();
+//                        }
+//                    };
+                    voite = voite +1;
+//            Message myMessage=new Message();
+//            Bundle resBundle = new Bundle();
+//            resBundle.putString("status", "SUCCESS");
+//            myMessage.obj=resBundle;
+//            thisServise.msgService = "++++++++++++++="+id_account;
+//            handler.sendMessage(myMessage);
                     new ChHttpAsyncTask().execute(url0);
                     Thread.sleep(DELAY);
                 } catch (InterruptedException e) {
@@ -170,29 +205,112 @@ public class SelfieServiceUpVoite extends Service {
         protected void onPostExecute(String result) {
             //   Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
 
-            try {
+            Message myMessage=new Message();
+            Bundle resBundle = new Bundle();
+            resBundle.putString("status", "SUCCESS");
+            myMessage.obj=resBundle;
+            thisServise.msgService = "!!!!!="+voite;
+            handler.sendMessage(myMessage);
+            db_MC.updateRightMCVoite(331,1,voite);
+//            Intent intent = new Intent (DATA_INSERTED);
+            Intent intent = new Intent (MineViewsActivity.BROADCAST_ACTION);
+            sendBroadcast(intent);
+//            Intent intent = new Intent(MainActivity.BROADCAST_ACTION);
+//            Log.d(LOG_TAG, "MyRun#" + startId + " start, time = " + time);
+//            try {
+//                // сообщаем об старте задачи
+//                intent.putExtra(MainActivity.PARAM_TASK, task);
+//                intent.putExtra(MainActivity.PARAM_STATUS, MainActivity.STATUS_START);
+//                sendBroadcast(intent);
+//
+//                // начинаем выполнение задачи
+//                TimeUnit.SECONDS.sleep(time);
+//
+//                // сообщаем об окончании задачи
+//                intent.putExtra(MainActivity.PARAM_STATUS, MainActivity.STATUS_FINISH);
+//                intent.putExtra(MainActivity.PARAM_RESULT, time * 100);
+//                sendBroadcast(intent);
+//
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
 
-                jObj = new JSONObject(result);
-                // Getting JSON Array
-                jaMsg = jObj.getJSONArray("msg");
-                JSONObject joMsg = jaMsg.getJSONObject(0);
-                strMsg = joMsg.getString("status");
-
-                if (strMsg.equals("new")) {
-                    sendNotif();
-                    Message myMessage=new Message();
-                    Bundle resBundle = new Bundle();
-                    resBundle.putString("status", "SUCCESS");
-                    myMessage.obj=resBundle;
-                    thisServise.msgService = "Есть новые Селфи";
-                    handler.sendMessage(myMessage);
-                }else{
-
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+//            Runnable run0 = new Runnable() {
+//                @Override
+//                public void run() {
+//                    MineViewsActivity.update();
+//                }
+//            };
+//            new Thread(new Runnable() {
+//                public void run() {
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+////                            img.setImageBitmap(finalBm);
+//                        }
+//                    });
+//                }
+//            }).start();
+//            MineViewsActivity.runOnUiThread(run0);
+//            try {
+//                jObj = new JSONObject(result);
+//
+//                // Getting JSON Array
+////                jaError = jObj.getJSONArray("error");
+////                JSONObject joError = jaError.getJSONObject(0);
+////                strError = joError.getString("status");
+////                if (strError.equals("none")) {
+////
+////
+////                    Message myMessage=new Message();
+////                    Bundle resBundle = new Bundle();
+////                    resBundle.putString("status", "SUCCESS");
+////                    myMessage.obj=resBundle;
+////                    thisServise.msgService = "обновили ";
+////                    handler.sendMessage(myMessage);
+////
+//////                    jaCompare = jObj.getJSONArray("compare");
+//////                    Integer iCompareLen = jaCompare.length();
+////////                    JSONObject joCompare0 = jaCompare.getJSONObject(0);
+//////
+//////                        String strCompareLen = iCompareLen.toString();
+//////                        // массивы данных
+//////                        for (int iC = 0; iC < iCompareLen; iC = iC + 1) {
+//////                            JSONObject joCompare = jaCompare.getJSONObject(iC);
+//////                            int id = joCompare.getInt("id");
+//////                            String date_crt = joCompare.getString("date_crt");
+//////
+//////                            jaPhoto = joCompare.getJSONArray("photo");
+//////
+//////                            JSONObject joPhotoLeft = jaPhoto.getJSONObject(0);
+//////                            String pathLeft = joPhotoLeft.getString("path");
+//////                            int idLeft =  joPhotoLeft.getInt("id");
+//////                            int orientationLeft =  joPhotoLeft.getInt("Orientation");
+//////                            int all_voiteLeft = joPhotoLeft.getInt("all_voite");
+//////
+//////                            JSONObject joPhotoRight = jaPhoto.getJSONObject(1);
+//////                            String pathRight = joPhotoRight.getString("path");
+//////                            int idRight =  joPhotoRight.getInt("id");
+//////                            int orientationRight = joPhotoRight.getInt("Orientation");
+//////                            int all_voiteRight = joPhotoRight.getInt("all_voite");
+//////                            //                        Toast.makeText(getBaseContext(), "pathRight "+pathRight, Toast.LENGTH_LONG).show();
+//////
+//////                            db_MC.addRecMC(id, date_crt, all_voiteLeft ,all_voiteRight ,
+//////                                    idLeft, idRight, orientationLeft, orientationRight, pathLeft, pathRight, 0);
+//////
+//////                        }
+////
+////                }else{
+//////                    Toast.makeText(getBaseContext(), "простите, не получается прочитать ваши Selfie :(", Toast.LENGTH_LONG).show();
+////                }
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            if (strError.equals("none")) {
+//                Toast.makeText(getBaseContext(), "ваших Selfie загружены", Toast.LENGTH_LONG).show();
+//            }else{
+//                Toast.makeText(getBaseContext(), "простите, не могу загрузить список ваших Selfie :(", Toast.LENGTH_LONG).show();
+//            }
 
 
         }

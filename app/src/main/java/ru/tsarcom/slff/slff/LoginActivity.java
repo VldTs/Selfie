@@ -99,6 +99,10 @@ public class LoginActivity extends ActionBarActivity  implements View.OnClickLis
                 Intent intent = new Intent(activity, mineViewsActivityClass);
                 intent.putExtra("id_account", id_account);
                 startActivity(intent);
+                startService(new Intent(this, SelfieServiceUpVoite.class).putExtra("id_account", id_account));
+                Intent intentUpVoite = new Intent(activity, mineViewsActivityClass);
+                intent.putExtra("id_account", id_account);
+                startActivity(intentUpVoite);
                 finish();
             }
 

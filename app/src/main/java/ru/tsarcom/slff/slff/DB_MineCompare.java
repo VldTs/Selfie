@@ -161,6 +161,18 @@ public class DB_MineCompare {
         return mDB.update(DBT_MC, cv, C_MC_CID + " = " + CID,
                 null);
     }
+    // Updating voite contact
+    public int updateRightMCVoite(int CID,  int VOITE_LEFT, int VOITE_RIGHT) {
+
+
+        ContentValues cv = new ContentValues();
+        cv.put(C_MC_VOITE_LEFT, VOITE_LEFT);
+        cv.put(C_MC_VOITE_RIGHT, VOITE_RIGHT);
+
+        // updating row
+        return mDB.update(DBT_MC, cv, C_MC_CID + " = " + CID,
+                null);
+    }
     // класс по созданию и управлению БД
     private class DBHelper extends SQLiteOpenHelper {
 
