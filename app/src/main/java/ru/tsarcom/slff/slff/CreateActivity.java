@@ -241,8 +241,8 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode,  Intent intent) {
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
+                if (resultCode == RESULT_OK) {
                 if (intent == null) {
                     Log.d(TAG, "Intent is null");
                 } else {

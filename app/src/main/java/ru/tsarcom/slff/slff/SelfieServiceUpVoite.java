@@ -88,12 +88,12 @@ public class SelfieServiceUpVoite extends Service {
     public synchronized void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
 
-            Message myMessage=new Message();
-            Bundle resBundle = new Bundle();
-            resBundle.putString("status", "SUCCESS");
-            myMessage.obj=resBundle;
-            thisServise.msgService = "---++++---"+id_account;
-            handler.sendMessage(myMessage);
+//            Message myMessage=new Message();
+//            Bundle resBundle = new Bundle();
+//            resBundle.putString("status", "SUCCESS");
+//            myMessage.obj=resBundle;
+//            thisServise.msgService = "---++++---"+id_account;
+//            handler.sendMessage(myMessage);
 //        try {
           //  id_account = intent.getStringExtra("id_account");
 //        }
@@ -161,19 +161,14 @@ public class SelfieServiceUpVoite extends Service {
                 try {
                     String url0;
                     url0 = "http://95.78.234.20:81/atest/jsonMineLoadVoite.php?id_account="+id_account;
-//                    Runnable run0 = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            MineViewsActivity.update();
-//                        }
-//                    };
+
+//                    Message myMessage1=new Message();
+//                    Bundle resBundle1 = new Bundle();
+//                    resBundle1.putString("status", "SUCCESS");
+//                    myMessage1.obj=resBundle1;
+//                    thisServise.msgService = "url0 = "+url0;
+//                    handler.sendMessage(myMessage1);
                     voite = voite +1;
-//            Message myMessage=new Message();
-//            Bundle resBundle = new Bundle();
-//            resBundle.putString("status", "SUCCESS");
-//            myMessage.obj=resBundle;
-//            thisServise.msgService = "++++++++++++++="+id_account;
-//            handler.sendMessage(myMessage);
                     new ChHttpAsyncTask().execute(url0);
                     Thread.sleep(DELAY);
                 } catch (InterruptedException e) {
@@ -190,7 +185,7 @@ public class SelfieServiceUpVoite extends Service {
         sPref = getSharedPreferences("MyPref",MODE_PRIVATE);
         String savedText = sPref.getString(ID_ACCOUNT, "");
         id_account = savedText;
-//        Toast.makeText(this, "Text loaded", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Text loaded"+id_account+"-", Toast.LENGTH_SHORT).show();
     }
     //----
     private class ChHttpAsyncTask extends AsyncTask<String, Void, String> {
@@ -203,114 +198,66 @@ public class SelfieServiceUpVoite extends Service {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            //   Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
+//               Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
 
-            Message myMessage=new Message();
-            Bundle resBundle = new Bundle();
-            resBundle.putString("status", "SUCCESS");
-            myMessage.obj=resBundle;
-            thisServise.msgService = "!!!!!="+voite;
-            handler.sendMessage(myMessage);
-            db_MC.updateRightMCVoite(331,1,voite);
+//            Message myMessage0=new Message();
+//            Bundle resBundle0 = new Bundle();
+//            resBundle0.putString("status", "SUCCESS");
+//            myMessage0.obj=resBundle0;
+//            thisServise.msgService = "result = "+result;
+//            handler.sendMessage(myMessage0);
+            try {
+                jObj = new JSONObject(result);
+                // Getting JSON Array
+                jaMsg = jObj.getJSONArray("error");
+                JSONObject joMsg = jaMsg.getJSONObject(0);
+                strMsg = joMsg.getString("status");
+                if (strMsg.equals("none")) {
+//                    sendNotif();
+                    jaCompare = jObj.getJSONArray("compare");
+                    Integer iCompareLen = jaCompare.length();
+//                    JSONObject joCompare0 = jaCompare.getJSONObject(0);
+//                    String description0 = joCompare0.getString("description");
+
+                    for (int iC = 0; iC < iCompareLen; iC = iC + 1) {
+                        JSONObject joCompare = jaCompare.getJSONObject(iC);
+                        int id = joCompare.getInt("id");
+//                        String date_crt = joCompare.getString("date_crt");
+//
+                        jaPhoto = joCompare.getJSONArray("photo");
+//
+                        JSONObject joPhotoLeft = jaPhoto.getJSONObject(0);
+                        int all_voiteLeft = joPhotoLeft.getInt("all_voite");
+//
+                        JSONObject joPhotoRight = jaPhoto.getJSONObject(1);
+                        int all_voiteRight = joPhotoRight.getInt("all_voite");
+
+                        db_MC.updateRightMCVoite(id,all_voiteLeft,all_voiteRight);
+
+                    }
+//            db_MC.updateRightMCVoite(331,1,voite);
 //            Intent intent = new Intent (DATA_INSERTED);
-            Intent intent = new Intent (MineViewsActivity.BROADCAST_ACTION);
-            sendBroadcast(intent);
-//            Intent intent = new Intent(MainActivity.BROADCAST_ACTION);
-//            Log.d(LOG_TAG, "MyRun#" + startId + " start, time = " + time);
-//            try {
-//                // сообщаем об старте задачи
-//                intent.putExtra(MainActivity.PARAM_TASK, task);
-//                intent.putExtra(MainActivity.PARAM_STATUS, MainActivity.STATUS_START);
-//                sendBroadcast(intent);
-//
-//                // начинаем выполнение задачи
-//                TimeUnit.SECONDS.sleep(time);
-//
-//                // сообщаем об окончании задачи
-//                intent.putExtra(MainActivity.PARAM_STATUS, MainActivity.STATUS_FINISH);
-//                intent.putExtra(MainActivity.PARAM_RESULT, time * 100);
-//                sendBroadcast(intent);
-//
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+//            Intent intent = new Intent (MineViewsActivity.BROADCAST_ACTION);
+                    Intent intent = new Intent (MineViewsActivity.BROADCAST_ACTION);
+                    sendBroadcast(intent);
 
-//            Runnable run0 = new Runnable() {
-//                @Override
-//                public void run() {
-//                    MineViewsActivity.update();
-//                }
-//            };
-//            new Thread(new Runnable() {
-//                public void run() {
-//                    runOnUiThread(new Runnable() {
-//                        public void run() {
-////                            img.setImageBitmap(finalBm);
-//                        }
-//                    });
-//                }
-//            }).start();
-//            MineViewsActivity.runOnUiThread(run0);
-//            try {
-//                jObj = new JSONObject(result);
-//
-//                // Getting JSON Array
-////                jaError = jObj.getJSONArray("error");
-////                JSONObject joError = jaError.getJSONObject(0);
-////                strError = joError.getString("status");
-////                if (strError.equals("none")) {
-////
-////
-////                    Message myMessage=new Message();
-////                    Bundle resBundle = new Bundle();
-////                    resBundle.putString("status", "SUCCESS");
-////                    myMessage.obj=resBundle;
-////                    thisServise.msgService = "обновили ";
-////                    handler.sendMessage(myMessage);
-////
-//////                    jaCompare = jObj.getJSONArray("compare");
-//////                    Integer iCompareLen = jaCompare.length();
-////////                    JSONObject joCompare0 = jaCompare.getJSONObject(0);
-//////
-//////                        String strCompareLen = iCompareLen.toString();
-//////                        // массивы данных
-//////                        for (int iC = 0; iC < iCompareLen; iC = iC + 1) {
-//////                            JSONObject joCompare = jaCompare.getJSONObject(iC);
-//////                            int id = joCompare.getInt("id");
-//////                            String date_crt = joCompare.getString("date_crt");
-//////
-//////                            jaPhoto = joCompare.getJSONArray("photo");
-//////
-//////                            JSONObject joPhotoLeft = jaPhoto.getJSONObject(0);
-//////                            String pathLeft = joPhotoLeft.getString("path");
-//////                            int idLeft =  joPhotoLeft.getInt("id");
-//////                            int orientationLeft =  joPhotoLeft.getInt("Orientation");
-//////                            int all_voiteLeft = joPhotoLeft.getInt("all_voite");
-//////
-//////                            JSONObject joPhotoRight = jaPhoto.getJSONObject(1);
-//////                            String pathRight = joPhotoRight.getString("path");
-//////                            int idRight =  joPhotoRight.getInt("id");
-//////                            int orientationRight = joPhotoRight.getInt("Orientation");
-//////                            int all_voiteRight = joPhotoRight.getInt("all_voite");
-//////                            //                        Toast.makeText(getBaseContext(), "pathRight "+pathRight, Toast.LENGTH_LONG).show();
-//////
-//////                            db_MC.addRecMC(id, date_crt, all_voiteLeft ,all_voiteRight ,
-//////                                    idLeft, idRight, orientationLeft, orientationRight, pathLeft, pathRight, 0);
-//////
-//////                        }
-////
-////                }else{
-//////                    Toast.makeText(getBaseContext(), "простите, не получается прочитать ваши Selfie :(", Toast.LENGTH_LONG).show();
-////                }
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            if (strError.equals("none")) {
-//                Toast.makeText(getBaseContext(), "ваших Selfie загружены", Toast.LENGTH_LONG).show();
-//            }else{
-//                Toast.makeText(getBaseContext(), "простите, не могу загрузить список ваших Selfie :(", Toast.LENGTH_LONG).show();
-//            }
+                }else{
+
+                    Message myMessage2=new Message();
+                    Bundle resBundle2 = new Bundle();
+                    resBundle2.putString("status", "SUCCESS");
+                    myMessage2.obj=resBundle2;
+                    thisServise.msgService = "error load voite :( ";
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+                Message myMessage=new Message();
+                Bundle resBundle = new Bundle();
+                resBundle.putString("status", "SUCCESS");
+                myMessage.obj=resBundle;
+                thisServise.msgService = "errrrrrrrrrrrrr ";
+            }
 
 
         }

@@ -147,12 +147,12 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mine_views);
 
-        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
-            baseDir=new File(android.os.Environment.getExternalStorageDirectory(),"Selfie");
-        else
-            baseDir=getCacheDir();
-        if(!baseDir.exists())
-            baseDir.mkdirs();
+//        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+//            baseDir=new File(android.os.Environment.getExternalStorageDirectory(),"Selfie");
+//        else
+//            baseDir=getCacheDir();
+//        if(!baseDir.exists())
+//            baseDir.mkdirs();
 
         Intent intent = getIntent();
         id_account = intent.getStringExtra("id_account");
@@ -232,7 +232,7 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
                 int status = intent.getIntExtra("PARAM_STATUS", 0);
                 Log.d(LOG_TAG, "onReceive: task = " + task + ", status = " + status);
 
-                Toast.makeText(getBaseContext(), "BroadcastReceiver ", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getBaseContext(), "BroadcastReceiver ", Toast.LENGTH_LONG).show();
 
                 getSupportLoaderManager().restartLoader(0, null, activity);
                 // Ловим сообщения о старте задач
