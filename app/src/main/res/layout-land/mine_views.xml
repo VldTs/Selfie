@@ -28,12 +28,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:padding="10dp">
-
-                <ImageView
+                <RelativeLayout
                     android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:id="@+id/imageView"
-                    android:background="@drawable/nemo" />
+                    android:layout_height="50dp">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/imageView"
+                        android:background="@drawable/nemo" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="ID"
+                        android:id="@+id/tvNickname"
+                        android:textColor="#ffffff"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:textSize="9dp"
+                        android:paddingLeft="1dp"
+                        android:paddingTop="1dp" />
+                </RelativeLayout>
+
 
 
                 <Button
@@ -49,13 +68,6 @@
                     android:textColor="@color/text_color2"
                     />
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="ID"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:id="@+id/tvNickname" />
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"

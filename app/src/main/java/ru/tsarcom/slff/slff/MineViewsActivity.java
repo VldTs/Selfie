@@ -746,7 +746,7 @@ public static void update(){
             pbLoad.setProgress(iall_voite);
 
             String url_left;
-            url_left = "uploads/"+id_account+"/"+cid+"/"+cIdLeft+"/img.png";
+            url_left = "uploads/"+id_account+"/"+cid+"/"+cIdLeft+"/img.jpg";
             if (id_account.isEmpty() || id_account.equals("0") || cid<=0 || cIdLeft <=0 ){
                 url_left = "empty.png";
             }

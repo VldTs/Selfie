@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -55,6 +56,35 @@ public class LoginActivity extends ActionBarActivity  implements View.OnClickLis
     protected AccountManager accountManager;
     LoginActivity activity;
     Class<MineViewsActivity> mineViewsActivityClass;
+//    private void ShortcutIcon(){
+//
+//        Intent shortcutIntent = new Intent(getApplicationContext(), LoginActivity.class);
+//        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//
+//        Intent addIntent = new Intent();
+//        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+//        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "Test");
+//        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.ic_launcher));
+//        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+//        getApplicationContext().sendBroadcast(addIntent);
+//    }
+    public void createShortCut(){
+        // a Intent to create a shortCut
+        Intent shortcutintent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+        //repeat to create is forbidden
+        shortcutintent.putExtra("duplicate", false);
+        //set the name of shortCut
+        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "FlyPanda");
+
+        //set icon
+        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.nemo);
+        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon);
+        //set the application to lunch when you click the icon
+        shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(getApplicationContext() , LoginActivity.class));
+        //sendBroadcast,done
+        sendBroadcast(shortcutintent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -97,13 +127,12 @@ public class LoginActivity extends ActionBarActivity  implements View.OnClickLis
             }else{
 
                 startService(new Intent(this, SelfieServiceF.class).putExtra("id_account", id_account));
+
+                startService(new Intent(this, SelfieServiceUpVoite.class).putExtra("id_account", id_account));
+
                 Intent intent = new Intent(activity, mineViewsActivityClass);
                 intent.putExtra("id_account", id_account);
                 startActivity(intent);
-                startService(new Intent(this, SelfieServiceUpVoite.class).putExtra("id_account", id_account));
-                Intent intentUpVoite = new Intent(activity, mineViewsActivityClass);
-                intent.putExtra("id_account", id_account);
-                startActivity(intentUpVoite);
                 finish();
             }
 

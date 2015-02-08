@@ -429,7 +429,7 @@ public class OthersViewsActivity extends Activity  implements View.OnClickListen
 
 
 //            url_left = "uploads/3/113/81/img.png";
-                url_left = "uploads/"+a_id+"/"+strCid+"/"+idLeft+"/img.png";
+                url_left = "uploads/"+a_id+"/"+strCid+"/"+idLeft+"/img.jpg";
 //                url_left = "http://95.78.234.20:81/atest/"+path_left;
 
                 if (a_id.isEmpty() || a_id.equals("0")  || strCid.isEmpty() || strCid.equals("0") ||
