@@ -20,36 +20,55 @@
             android:layout_height="wrap_content">
 
 
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ЛИЧНЫЕ"
+                android:id="@+id/btnMine"
+                android:layout_weight="1"
+                android:background="@drawable/button_background2"
+                android:gravity="center_horizontal|center_vertical"
+                android:textSize="18sp"
+                android:textStyle="bold|italic"
+                android:textColor="@color/text_color2"
+                />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="CREATE"
-                android:id="@+id/textView"
-                android:layout_weight="1" />
+                android:text="999"
+                android:id="@+id/tvCreateID"
+                android:padding="2dp" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MINE"
-                android:id="@+id/btnMine"
-                android:layout_weight="1" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="OTHERS"
+                android:text="ДРУГИЕ"
                 android:id="@+id/btnOthers"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@drawable/button_background2"
+                android:gravity="center_horizontal|center_vertical"
+                android:textSize="18sp"
+                android:textStyle="bold|italic"
+                android:textColor="@color/text_color2"
+                />
 
         </LinearLayout>
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="опубликовать"
-            android:id="@+id/btnShare" />
-
+            android:text="ОПУБЛИКОВАТЬ"
+            android:id="@+id/btnShare"
+            android:background="@drawable/button_background2"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="18sp"
+            android:textStyle="bold|italic"
+            android:textColor="@color/text_color2"
+            android:padding="3dp"
+            />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -73,12 +92,20 @@
                         android:src="@drawable/plus_left"
                         android:layout_gravity="center" />
 
+
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:text="CAMERA"
+                        android:id="@+id/btnCameraLeft"
+                        android:background="@drawable/button_background2"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:textSize="18sp"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/text_color2"
                         android:onClick="onClickCameraLeft"
-                        android:id="@+id/btnCameraLeft" />
+                        android:padding="3dp"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -92,12 +119,20 @@
                         android:id="@+id/ivRight"
                         android:src="@drawable/plus_right"
                         android:layout_gravity="center" />
+
                     <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:text="CAMERA"
+                        android:id="@+id/btnCameraRight"
+                        android:background="@drawable/button_background2"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:textSize="18sp"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/text_color2"
                         android:onClick="onClickCameraRight"
-                        android:id="@+id/btnCameraRight" />
+                        android:padding="3dp"
+                        />
                 </LinearLayout>
 
             </LinearLayout>

@@ -20,41 +20,61 @@
             android:layout_height="wrap_content">
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="VIEW"
-                android:id="@+id/textView"
-                android:layout_weight="1" />
-
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MINE"
+                android:text="ЛИЧНЫЕ"
                 android:id="@+id/btnMine"
-                android:layout_weight="1" />
+                android:background="@drawable/button_background2"
+                android:gravity="center_horizontal|center_vertical"
+                android:textSize="18sp"
+                android:textStyle="bold|italic"
+                android:textColor="@color/text_color2"
+                android:padding="0dp"
+                android:layout_weight="1"
+                />
+
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="OTHERS"
+                android:text="ДРУГИЕ"
                 android:id="@+id/btnOthers"
-                android:layout_weight="1" />
+                android:background="@drawable/button_background2"
+                android:gravity="center_horizontal|center_vertical"
+                android:textSize="18sp"
+                android:textStyle="bold|italic"
+                android:textColor="@color/text_color2"
+                android:padding="0dp"
+                android:layout_weight="1"
+                />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NEW"
+                android:text="СОЗДАТЬ"
                 android:id="@+id/btnCreate"
-                android:layout_weight="1" />
+                android:background="@drawable/button_background2"
+                android:gravity="center_horizontal|center_vertical"
+                android:textSize="18sp"
+                android:textStyle="bold|italic"
+                android:textColor="@color/text_color2"
+                android:padding="0dp"
+                android:layout_weight="1"
+                />
         </LinearLayout>
 
         <Button
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Опубликовать"
-            android:id="@+id/btnShare" />
+            android:text="ОПУБЛИКОВАТЬ"
+            android:id="@+id/btnShare"
+            android:background="@drawable/button_background2"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="18sp"
+            android:textStyle="bold|italic"
+            android:textColor="@color/text_color2"
+            android:padding="0dp"
+            />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -84,21 +104,24 @@
                             android:layout_gravity="center"
                             android:layout_weight="1" />
 
+
                         <Button
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="я выбираю эту"
+                            android:text="НРАВИТЬСЯ"
                             android:id="@+id/btnVoiteLeft"
-                            android:textStyle="bold"
-                            android:textSize="30dp"
-                            android:background="#000080"
-                            android:textColor="#ffffff"
+                            android:background="@drawable/button_background_blue"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:textSize="24sp"
+                            android:textStyle="bold|italic"
+                            android:textColor="@color/text_color2"
+                            android:padding="0dp"
                             android:layout_gravity="center_horizontal|bottom"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginRight="30dp"
                             android:layout_marginTop="3dp"
-                            android:layout_marginBottom="3dp" />
-
+                            android:layout_marginBottom="3dp"
+                            />
                     </LinearLayout>
 
                     <TextView
@@ -140,17 +163,20 @@
                         <Button
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="а я выбираю эту"
+                            android:text="НРАВИТЬСЯ"
                             android:id="@+id/btnVoiteRight"
-                            android:layout_gravity="center_horizontal"
-                            android:textColor="#ffffff"
-                            android:textSize="30dp"
-                            android:textStyle="bold"
-                            android:background="#C00000"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/button_background_red"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:textSize="24sp"
+                            android:textStyle="bold|italic"
+                            android:textColor="@color/text_color2"
+                            android:padding="0dp"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginRight="30dp"
                             android:layout_marginTop="3dp"
-                            android:layout_marginBottom="3dp" />
+                            android:layout_marginBottom="3dp"
+                            />
 
                     </LinearLayout>
 

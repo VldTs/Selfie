@@ -100,8 +100,8 @@ public class CreateActivity extends Activity  implements View.OnClickListener {
         } catch(NumberFormatException nfe) {
             System.out.println("Could not parse " + id_compare);
         }
-        TextView tvCreateID = (TextView)findViewById(R.id.textView);
-        tvCreateID.setText(tvCreateID.getText()+"  # "+id_compare);
+        TextView tvCreateID = (TextView)findViewById(R.id.tvCreateID);
+        tvCreateID.setText(id_compare);
 //      textView
 
         btnOthers = (Button) findViewById(R.id.btnOthers);

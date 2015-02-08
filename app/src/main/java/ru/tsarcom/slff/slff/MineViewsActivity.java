@@ -130,6 +130,8 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
 
     BroadcastReceiver br;
 
+    File pathf0;
+
     public final static String BROADCAST_ACTION = "ru.tsarcom.slff.slff";
             public ImageLoaderSmall ImageLoaderSmall0;
 
@@ -147,6 +149,12 @@ public class MineViewsActivity extends FragmentActivity implements LoaderCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mine_views);
 
+        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+            pathf0=new File(android.os.Environment.getExternalStorageDirectory(),"sssss");
+        else
+            pathf0=getCacheDir();
+        if(!pathf0.exists())
+            pathf0.mkdirs();
 //        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
 //            baseDir=new File(android.os.Environment.getExternalStorageDirectory(),"Selfie");
 //        else
@@ -411,18 +419,6 @@ public static void update(){
                             db_MC.addRecMC(id, date_crt, all_voiteLeft ,all_voiteRight ,
                                     idLeft, idRight, orientationLeft, orientationRight, pathLeft, pathRight, 0);
 
-//                            File pathf0;
-//                            String fname;
-//                            if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
-//                                pathf0=new File(android.os.Environment.getExternalStorageDirectory(),"sssss");
-//                            else
-//                                pathf0=getCacheDir();
-//                            if(!pathf0.exists())
-//                                pathf0.mkdirs();
-//                            fname = ""+idRight;
-//                            String url_right = "uploads/3/"+id+"/"+idRight+"/img.png";
-//                            ImageLoaderSmall.DisplayImageAndSave("http://95.78.234.20:81/atest/"+url_right, img, ivRight,
-//                                    orientationRight, pathf0,  id,  idRight, fname);
                         }
                     }
 
@@ -750,36 +746,33 @@ public static void update(){
             pbLoad.setProgress(iall_voite);
 
             String url_left;
-            url_left = "uploads/3/113/81/img.png";
-            url_left = "uploads/3/"+cid+"/"+cIdLeft+"/img.png";
-            url_left = "http://95.78.234.20:81/atest/"+path_left;
-//            String url_right = "uploads/3/167/157/img.png";
-//            String url_right = "uploads/3/161/153/img.jpg";
-//            String url_right = "uploads/3/167/156/img.jpg";
+            url_left = "uploads/"+id_account+"/"+cid+"/"+cIdLeft+"/img.png";
+            if (id_account.isEmpty() || id_account.equals("0") || cid<=0 || cIdLeft <=0 ){
+                url_left = "empty.png";
+            }
+//            url_left = "http://95.78.234.20:81/atest/"+path_left;
+            url_left = "http://95.78.234.20:81/atest/"+url_left;
+
             String url_right;
-             url_right = "uploads/3/"+cid+"/"+cIdRight+"/img.jpg";
-            url_right = "http://95.78.234.20:81/atest/"+path_right;
-//             url_right = "uploads/3/"+cid+"/"+cIdRight+"/img.png";
-//            http://95.78.234.20:81/atest/uploads/3/167/157/img.png
+            url_right = "uploads/"+id_account+"/"+cid+"/"+cIdRight+"/img.jpg";
+            if (id_account.isEmpty() || id_account.equals("0") || cid<=0 || cIdRight <=0 ){
+                url_right = "empty.png";
+            }
+//            url_right = "http://95.78.234.20:81/atest/"+path_right;
+            url_right = "http://95.78.234.20:81/atest/"+url_right;
+
             int img = R.drawable.abc_ic_clear_mtrl_alpha;
 //            ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_left, img, ivLeft, imgOrientation_left_i);
 
-            File pathf0;
             String fname;
-            if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
-                pathf0=new File(android.os.Environment.getExternalStorageDirectory(),"sssss");
-            else
-                pathf0=getCacheDir();
-            if(!pathf0.exists())
-                pathf0.mkdirs();
             fname = ""+cIdRight+"";
 //            ImageLoaderSmall.DisplayImage(url_left, img, ivLeft, imgOrientation_left_i);
             ImageLoaderSmallAndSave.DisplayImageAndSave(url_left, img, ivLeft, imgOrientation_left_i,
                     pathf0,  cid,  cIdLeft, fname);
             fname = ""+cIdLeft+"";
 //            ImageLoaderSmall.DisplayImage(url_right, img, ivRight, imgOrientation_right_i);
-            ImageLoaderSmallAndSave.DisplayImageAndSave(url_right, img, ivRight,
-                    imgOrientation_right_i, pathf0,  cid,  cIdRight, fname);
+            ImageLoaderSmallAndSave.DisplayImageAndSave(url_right, img, ivRight, imgOrientation_right_i,
+                    pathf0,  cid,  cIdRight, fname);
 
         }
     }

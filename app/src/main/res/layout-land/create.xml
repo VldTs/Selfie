@@ -1,0 +1,163 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    tools:context="ru.tsarcom.selfie.LoginActivity">
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent">
+
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="Л\nИ\nЧ\nН\nЫ\nЕ"
+                    android:id="@+id/btnMine"
+                    android:background="@drawable/button_background2"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textSize="18sp"
+                    android:textStyle="bold|italic"
+                    android:textColor="@color/text_color2"
+                    android:padding="0dp"
+                    android:layout_weight="1"
+                    />
+
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="Д\nР\nУ\nГ\nИ\nЕ"
+                    android:id="@+id/btnOthers"
+                    android:background="@drawable/button_background2"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textSize="18sp"
+                    android:textStyle="bold|italic"
+                    android:textColor="@color/text_color2"
+                    android:padding="0dp"
+                    android:layout_weight="1"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:id="@+id/ivLeft"
+                            android:src="@drawable/plus_left"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"/>
+
+
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="CAMERA"
+                            android:id="@+id/btnCameraLeft"
+                            android:background="@drawable/button_background2"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:textSize="18sp"
+                            android:textStyle="bold|italic"
+                            android:textColor="@color/text_color2"
+                            android:onClick="onClickCameraLeft"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginRight="30dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginBottom="3dp"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:id="@+id/ivRight"
+                            android:src="@drawable/plus_right"
+                            android:layout_gravity="center"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="CAMERA"
+                            android:id="@+id/btnCameraRight"
+                            android:background="@drawable/button_background2"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:textSize="18sp"
+                            android:textStyle="bold|italic"
+                            android:textColor="@color/text_color2"
+                            android:onClick="onClickCameraRight"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginRight="30dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginBottom="3dp"
+                            />
+                    </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="999"
+                    android:id="@+id/tvCreateID"
+                    android:padding="2dp" />
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="О\nП\nУ\nБ\nЛ\nИ\nК\nО\nВ\nА\nТ\nЬ"
+                    android:id="@+id/btnShare"
+                    android:background="@drawable/button_background2"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textSize="10sp"
+                    android:textStyle="bold|italic"
+                    android:textColor="@color/text_color2"
+                    android:padding="0dp"
+                    android:layout_weight="1"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+
+
+</RelativeLayout>

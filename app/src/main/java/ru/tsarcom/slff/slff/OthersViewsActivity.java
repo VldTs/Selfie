@@ -64,11 +64,14 @@ public class OthersViewsActivity extends Activity  implements View.OnClickListen
     final String ATTRIBUTE_COMPARE_ID = "txtId";
     final String ATTRIBUTE_NAME_DATE_CRT = "txtDateCrt";
     //    final String ATTRIBUTE_NAME_CHECKED = "checked";
+    final String ATTRIBUTE_ID_LEFT = "idLeft";
+    final String ATTRIBUTE_ID_RIGHT = "idRight";
     final String ATTRIBUTE_NAME_LEFT = "imLeft";
     final String ATTRIBUTE_NAME_RIGHT = "imRight";
     final String ATTRIBUTE_VOITE_LEFT = "tvVoiteLeft";
     final String ATTRIBUTE_VOITE_RIGHT = "tvVoiteRight";
     final String ATTRIBUTE_NICKNAME = "tvNickname";
+    final String ATTRIBUTE_A_ID = "tvA_id";
     final String ATTRIBUTE_NAME_PB = "pb";
     final String ATTRIBUTE_ORNT_LEFT = "OrientationLeft";
     final String ATTRIBUTE_ORNT_RIGHT = "OrientationRight";
@@ -237,12 +240,12 @@ public class OthersViewsActivity extends Activity  implements View.OnClickListen
                 JSONObject joError = jaError.getJSONObject(0);
                 strError = joError.getString("status");
                 if (strError.equals("none")) {
-                    jaAccount = jObj.getJSONArray("account");
-                    JSONObject joAccount = jaAccount.getJSONObject(0);
-                    String strNickname = joAccount.getString("nickname");
-//                    tvNickname.setText(strNickname);
-
-                    activity.setTitle("Selfie - " + strNickname);
+//                    jaAccount = jObj.getJSONArray("account");
+//                    JSONObject joAccount = jaAccount.getJSONObject(0);
+//                    String strNickname = joAccount.getString("nickname");
+////                    tvNickname.setText(strNickname);
+//
+//                    activity.setTitle("Selfie - " + strNickname);
                     jaCompare = jObj.getJSONArray("compare");
                     Integer iCompareLen = jaCompare.length();
                     JSONObject joCompare0 = jaCompare.getJSONObject(0);
@@ -267,17 +270,20 @@ public class OthersViewsActivity extends Activity  implements View.OnClickListen
                         for (int iC = 0; iC < iCompareLen; iC = iC + 1) {
                             JSONObject joCompare = jaCompare.getJSONObject(iC);
                             String id = joCompare.getString("id");
+                            String a_id = joCompare.getString("a_id");
 //                            String id = joCompare.getString("nickname");
                             String date_crt = joCompare.getString("date_crt");
                             String nickname = joCompare.getString("nickname");
 
                             jaPhoto = joCompare.getJSONArray("photo");
                             JSONObject joPhotoLeft = jaPhoto.getJSONObject(0);
+                            String idLeft = joPhotoLeft.getString("id");
                             String pathLeft = joPhotoLeft.getString("path");
                             String all_voiteLeft = joPhotoLeft.getString("all_voite");
                             String orientationLeft =  joPhotoLeft.getString("Orientation");
                             //                        Toast.makeText(getBaseContext(), "pathLeft "+pathLeft, Toast.LENGTH_LONG).show();
                             JSONObject joPhotoRight = jaPhoto.getJSONObject(1);
+                            String idRight = joPhotoRight.getString("id");
                             String pathRight = joPhotoRight.getString("path");
                             String all_voiteRight = joPhotoRight.getString("all_voite");
                             String orientationRight = joPhotoRight.getString("Orientation");
@@ -285,8 +291,12 @@ public class OthersViewsActivity extends Activity  implements View.OnClickListen
 
                             m = new HashMap<String, Object>();
                             m.put(ATTRIBUTE_COMPARE_ID, id);
+                            m.put(ATTRIBUTE_A_ID, a_id);
                             m.put(ATTRIBUTE_NICKNAME, nickname);
                             m.put(ATTRIBUTE_NAME_DATE_CRT, date_crt);
+
+                            m.put(ATTRIBUTE_ID_LEFT, idLeft);
+                            m.put(ATTRIBUTE_ID_RIGHT, idRight);
 //                            ImageLoader imgLoader2 = new ImageLoader(getApplicationContext());
 //                            m.put(ATTRIBUTE_NAME_LEFT, imgLoader.getBitmap(image_url));
                             m.put(ATTRIBUTE_VOITE_LEFT, all_voiteLeft);
@@ -365,13 +375,17 @@ public class OthersViewsActivity extends Activity  implements View.OnClickListen
                 ImageView ivRight=(ImageView)vi.findViewById(R.id.ivRight);
                 String strCid = (String) data.get(ATTRIBUTE_COMPARE_ID);
                 String strNickname = (String) data.get(ATTRIBUTE_NICKNAME);
+                String a_id = (String) data.get(ATTRIBUTE_A_ID);
                 String strCdate = (String) data.get(ATTRIBUTE_NAME_DATE_CRT);
                 String url_left = (String) data.get(ATTRIBUTE_NAME_LEFT);
                 String url_right = (String) data.get(ATTRIBUTE_NAME_RIGHT);
+                String idLeft = (String) data.get(ATTRIBUTE_ID_LEFT);
+                String idRight = (String) data.get(ATTRIBUTE_ID_RIGHT);
                 String all_voiteLeft = (String) data.get(ATTRIBUTE_VOITE_LEFT);
                 String all_voiteRight = (String) data.get(ATTRIBUTE_VOITE_RIGHT);
                 String imgOrientation_left = (String) data.get(ATTRIBUTE_ORNT_LEFT);
                 String imgOrientation_right = (String) data.get(ATTRIBUTE_ORNT_RIGHT);
+
                 tvCid.setText(strCid);
                 tvNickname.setText(strNickname);
                 tvCdate.setText(strCdate);
@@ -412,10 +426,36 @@ public class OthersViewsActivity extends Activity  implements View.OnClickListen
                 pbLoad.setSecondaryProgress(iall_voiteLeft);
                 pbLoad.setProgress(iall_voite);
 
+
+
+//            url_left = "uploads/3/113/81/img.png";
+                url_left = "uploads/"+a_id+"/"+strCid+"/"+idLeft+"/img.png";
+//                url_left = "http://95.78.234.20:81/atest/"+path_left;
+
+                if (a_id.isEmpty() || a_id.equals("0")  || strCid.isEmpty() || strCid.equals("0") ||
+                        idLeft.isEmpty() || idLeft.equals("0") ){
+                    url_left = "empty.png";
+                }
+                url_left = "http://95.78.234.20:81/atest/"+url_left;
+
+//                Toast.makeText(getBaseContext(), "url_left = "+url_left,
+//                        Toast.LENGTH_SHORT).show();
+//            String url_right = "uploads/3/167/157/img.png";
+                url_right = "uploads/"+a_id+"/"+strCid+"/"+idRight+"/img.jpg";
+
+                if (a_id.isEmpty() || a_id.equals("0") || strCid.isEmpty() || strCid.equals("0") ||
+                        idRight.isEmpty() || idRight.equals("0") ){
+                    url_right = "empty.png";
+                }
+                url_right = "http://95.78.234.20:81/atest/"+url_right;
+
+//            Toast.makeText(getBaseContext(), "url_right = "+url_right,
+//                    Toast.LENGTH_SHORT).show();
+//                url_right = "http://95.78.234.20:81/atest/"+path_right;
 //                int img = R.drawable.abc_ic_clear_normal;
                 int img = R.drawable.abc_ic_clear_mtrl_alpha;
-                ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_left, img, ivLeft,imgOrientation_left_i);
-                ImageLoaderSmall.DisplayImage("http://95.78.234.20:81/atest/"+url_right, img, ivRight,imgOrientation_right_i);
+                ImageLoaderSmall.DisplayImage(url_left, img, ivLeft,imgOrientation_left_i);
+                ImageLoaderSmall.DisplayImage(url_right, img, ivRight,imgOrientation_right_i);
                 return vi;
             }
         }

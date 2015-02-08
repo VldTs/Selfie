@@ -2,6 +2,7 @@ package ru.tsarcom.slff.slff;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
