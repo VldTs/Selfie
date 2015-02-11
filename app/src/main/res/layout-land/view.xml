@@ -71,13 +71,13 @@
                             android:layout_height="fill_parent"
                             android:layout_alignParentTop="false">
 
-                            <ImageView
+                            <ru.tsarcom.vs.uselfie.ZoomableImageView
                                 android:layout_width="fill_parent"
                                 android:layout_height="fill_parent"
                                 android:id="@+id/ivLeft"
-                                android:src="@drawable/abc_btn_radio_to_on_mtrl_000"
                                 android:layout_gravity="center"
                                 android:layout_weight="1" />
+
 
 
                             <Button
@@ -129,11 +129,10 @@
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent">
 
-                            <ImageView
+                            <ru.tsarcom.vs.uselfie.ZoomableImageView
                                 android:layout_width="fill_parent"
                                 android:layout_height="fill_parent"
                                 android:id="@+id/ivRight"
-                                android:src="@drawable/abc_btn_radio_to_on_mtrl_000"
                                 android:layout_gravity="center"
                                 android:layout_weight="1" />
 

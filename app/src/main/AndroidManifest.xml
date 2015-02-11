@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.tsarcom.slff.slff" >
+    package="ru.tsarcom.vs.uselfie" >
 
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -23,7 +23,7 @@
         android:logo="@drawable/nemo">
 
         <activity
-            android:name="ru.tsarcom.slff.slff.LoginActivity"
+            android:name="ru.tsarcom.vs.uselfie.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,24 +34,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ru.tsarcom.slff.slff.MineViewsActivity"
+            android:name="ru.tsarcom.vs.uselfie.MineViewsActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="ru.tsarcom.slff.slff.OthersViewsActivity"
+            android:name="ru.tsarcom.vs.uselfie.OthersViewsActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="ru.tsarcom.slff.slff.CreateActivity"
+            android:name="ru.tsarcom.vs.uselfie.CreateActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="ru.tsarcom.slff.slff.ViewActivity"
+            android:name="ru.tsarcom.vs.uselfie.ViewActivity"
             android:label="@string/app_name" >
         </activity>
 
         <receiver
-            android:name="ru.tsarcom.slff.slff.SelfieBroadReceiver"
+            android:name="ru.tsarcom.vs.uselfie.SelfieBroadReceiver"
             android:enabled="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -59,11 +59,11 @@
         </receiver>
 
         <service
-            android:name="ru.tsarcom.slff.slff.SelfieServiceF"
+            android:name="ru.tsarcom.vs.uselfie.SelfieServiceF"
             android:enabled="true" >
         </service>
         <service
-            android:name="ru.tsarcom.slff.slff.SelfieServiceUpVoite"
+            android:name="ru.tsarcom.vs.uselfie.SelfieServiceUpVoite"
             android:enabled="true" >
         </service>
 

@@ -6,7 +6,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
-    tools:context="ru.tsarcom.selfie.LoginActivity">
+    android:background="@drawable/wp_1">
 
     <LinearLayout
         android:orientation="vertical"
@@ -61,20 +61,54 @@
                 android:padding="0dp"
                 android:layout_weight="1"
                 />
+
         </LinearLayout>
 
-        <Button
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="ОПУБЛИКОВАТЬ"
-            android:id="@+id/btnShare"
-            android:background="@drawable/button_background2"
-            android:gravity="center_horizontal|center_vertical"
-            android:textSize="18sp"
-            android:textStyle="bold|italic"
-            android:textColor="@color/text_color2"
-            android:padding="0dp"
-            />
+            android:layout_height="wrap_content">
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                <!--android:text="-"-->
+                <!--android:id="@+id/tvVoteLeft"-->
+                <!--android:paddingLeft="15dp"-->
+                <!--android:paddingRight="15dp"-->
+                <!--android:textColor="#ff02074f"-->
+                <!--android:textSize="32dp"-->
+                <!--android:shadowColor="#ff1f3e87"-->
+                <!--android:textStyle="bold|italic"-->
+                <!--android:singleLine="false" />-->
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ОПУБЛИКОВАТЬ"
+                android:id="@+id/btnShare"
+                android:background="@drawable/button_background2"
+                android:gravity="center_horizontal|center_vertical"
+                android:textSize="18sp"
+                android:textStyle="bold|italic"
+                android:textColor="@color/text_color2"
+                android:padding="0dp"
+                android:layout_weight="1" />
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                <!--android:text="-"-->
+                <!--android:id="@+id/tvVoteRight"-->
+                <!--android:paddingLeft="15dp"-->
+                <!--android:paddingRight="15dp"-->
+                <!--android:textColor="#ff97090b"-->
+                <!--android:textSize="32dp"-->
+                <!--android:shadowColor="#ffdd0a15"-->
+                <!--android:textStyle="bold|italic" />-->
+        </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -95,14 +129,12 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_alignParentTop="false">
-
-                        <ImageView
+                        <ru.tsarcom.vs.uselfie.ZoomableImageView
                             android:layout_width="380dp"
                             android:layout_height="380dp"
                             android:id="@+id/ivLeft"
-                            android:src="@drawable/abc_btn_radio_to_on_mtrl_000"
                             android:layout_gravity="center"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"/>
 
 
                         <Button
@@ -151,14 +183,12 @@
                         android:orientation="vertical"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent">
-
-                        <ImageView
+                        <ru.tsarcom.vs.uselfie.ZoomableImageView
                             android:layout_width="380dp"
                             android:layout_height="380dp"
                             android:id="@+id/ivRight"
-                            android:src="@drawable/abc_btn_radio_to_on_mtrl_000"
                             android:layout_gravity="center"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"/>
 
                         <Button
                             android:layout_width="fill_parent"

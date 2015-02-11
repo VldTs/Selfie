@@ -63,7 +63,7 @@ MERGED from com.android.support:support-v4:21.0.2:16:5
 		ADDED from AndroidManifest.xml:22:9
 	android:logo
 		ADDED from AndroidManifest.xml:23:9
-activity#ru.tsarcom.slff.slff.LoginActivity
+activity#ru.tsarcom.vs.uselfie.LoginActivity
 ADDED from AndroidManifest.xml:25:9
 	android:label
 		ADDED from AndroidManifest.xml:27:13
@@ -87,31 +87,31 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:33:17
 	android:name
 		ADDED from AndroidManifest.xml:33:27
-activity#ru.tsarcom.slff.slff.MineViewsActivity
+activity#ru.tsarcom.vs.uselfie.MineViewsActivity
 ADDED from AndroidManifest.xml:36:9
 	android:label
 		ADDED from AndroidManifest.xml:38:13
 	android:name
 		ADDED from AndroidManifest.xml:37:13
-activity#ru.tsarcom.slff.slff.OthersViewsActivity
+activity#ru.tsarcom.vs.uselfie.OthersViewsActivity
 ADDED from AndroidManifest.xml:40:9
 	android:label
 		ADDED from AndroidManifest.xml:42:13
 	android:name
 		ADDED from AndroidManifest.xml:41:13
-activity#ru.tsarcom.slff.slff.CreateActivity
+activity#ru.tsarcom.vs.uselfie.CreateActivity
 ADDED from AndroidManifest.xml:44:9
 	android:label
 		ADDED from AndroidManifest.xml:46:13
 	android:name
 		ADDED from AndroidManifest.xml:45:13
-activity#ru.tsarcom.slff.slff.ViewActivity
+activity#ru.tsarcom.vs.uselfie.ViewActivity
 ADDED from AndroidManifest.xml:48:9
 	android:label
 		ADDED from AndroidManifest.xml:50:13
 	android:name
 		ADDED from AndroidManifest.xml:49:13
-receiver#ru.tsarcom.slff.slff.SelfieBroadReceiver
+receiver#ru.tsarcom.vs.uselfie.SelfieBroadReceiver
 ADDED from AndroidManifest.xml:53:9
 	android:enabled
 		ADDED from AndroidManifest.xml:55:13
@@ -123,13 +123,13 @@ action#android.intent.action.BOOT_COMPLETED
 ADDED from AndroidManifest.xml:57:17
 	android:name
 		ADDED from AndroidManifest.xml:57:25
-service#ru.tsarcom.slff.slff.SelfieServiceF
+service#ru.tsarcom.vs.uselfie.SelfieServiceF
 ADDED from AndroidManifest.xml:61:9
 	android:enabled
 		ADDED from AndroidManifest.xml:63:13
 	android:name
 		ADDED from AndroidManifest.xml:62:13
-service#ru.tsarcom.slff.slff.SelfieServiceUpVoite
+service#ru.tsarcom.vs.uselfie.SelfieServiceUpVoite
 ADDED from AndroidManifest.xml:65:9
 	android:enabled
 		ADDED from AndroidManifest.xml:67:13
