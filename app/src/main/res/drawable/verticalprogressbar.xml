@@ -3,7 +3,7 @@
 
     <item android:id="@android:id/background">
         <shape>
-            <corners android:radius="5dip" />
+            <corners android:radius="1dip" />
 
 
             <stroke
@@ -17,7 +17,7 @@
             android:clipOrientation="horizontal"
             android:gravity="left" >
             <shape>
-                <corners android:radius="5dip" />
+                <corners android:radius="1dip" />
 
                 <solid android:color="#C00000" />
 
@@ -31,7 +31,7 @@
     <item android:id="@android:id/secondaryProgress">
         <clip>
             <shape>
-                <corners android:radius="5dip" />
+                <corners android:radius="1dip" />
 
                 <solid android:color="#000080" />
 

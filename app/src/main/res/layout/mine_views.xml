@@ -5,8 +5,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:paddingBottom="0dp"
-    android:background="@drawable/wp_1">
+    android:paddingBottom="0dp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -25,7 +24,6 @@
             android:padding="0dp">
 
 
-
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,7 +39,8 @@
 
             <RelativeLayout
                 android:layout_width="50dp"
-                android:layout_height="50dp">
+                android:layout_height="50dp"
+                android:padding="3dp">
 
                 <ImageView
                     android:layout_width="50dp"
@@ -87,5 +86,37 @@
 
 
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:id="@+id/btnCreate2"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="30dp"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentBottom="true"
+        android:textSize="45sp"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:background="@drawable/shema" />
+    <!--<ru.tsarcom.vs.uselfie.CircularButton-->
+        <!--android:layout_width="95dp"-->
+        <!--android:layout_height="95dp"-->
+        <!--android:text="+"-->
+        <!--android:id="@+id/btnCreate2"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_margin="30dp"-->
+        <!--android:layout_alignParentEnd="false"-->
+        <!--android:layout_alignParentStart="false"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:textSize="45sp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:gravity="center"-->
+        <!--android:textColor="#ffffff"-->
+        <!--android:textStyle="bold"-->
+        <!--android:background="@drawable/shema" />-->
 
 </RelativeLayout>

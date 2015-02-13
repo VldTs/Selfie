@@ -11,19 +11,34 @@
         android:layout_height="wrap_content">
 
         <FrameLayout
-            android:layout_width="112dp"
-            android:layout_height="112dp">
+            android:layout_width="122dp"
+            android:layout_height="122dp"
 
-            <ImageView
+            android:layout_marginLeft="10dp">
+
+            <ru.tsarcom.vs.uselfie.CircularImageViewBlue
                 android:id="@+id/ivLeft"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:src="@drawable/abc_ic_clear_mtrl_alpha"
-                android:background="@drawable/image_border_blue"
-                android:padding="3dp"
-                android:paddingLeft="0dp"
-                android:layout_margin="1dp">
-            </ImageView>
+
+
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+
+                android:layout_marginLeft="3dp"
+            />
+
+            <TextView
+                android:id="@+id/tvVoiteLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="40"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:layout_gravity="right|top"
+                android:background="@drawable/image_tv_blue"
+                android:layout_marginTop="2dp"
+                android:textColor="#ffffffff">
+            </TextView>
         </FrameLayout>
 
         <LinearLayout
@@ -33,16 +48,33 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:layout_gravity="center">
+            <LinearLayout
+                android:id="@+id/linearLayout0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center">
             <TextView
-            android:id="@+id/tvCid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-                android:textSize="8dp">
+                android:id="@+id/tvCid0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="# "
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                android:textSize="18dp">
+            </TextView>
+            <TextView
+                android:id="@+id/tvCid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                android:textSize="15dp">
         </TextView>
+            </LinearLayout>
             <TextView
                 android:id="@+id/tvCdate"
                 android:layout_width="wrap_content"
@@ -58,30 +90,12 @@
                 android:gravity="center_horizontal">
 
                 <TextView
-                    android:id="@+id/tvVoiteLeft"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="40"
-                    android:textSize="28dp"
-                    android:textStyle="bold">
-                </TextView>
-                <TextView
                     android:id="@+id/tvText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text=" VS "
-                    android:textSize="18dp"
-                    android:textStyle="bold">
-                </TextView>
-                <TextView
-                    android:id="@+id/tvVoiteRight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="97"
-                    android:textSize="28dp"
+                    android:text=" VS. "
+                    android:textSize="24dp"
                     android:textStyle="bold">
                 </TextView>
             </LinearLayout>
@@ -95,23 +109,35 @@
                 android:progressDrawable="@drawable/verticalprogressbar"
                 android:max="5"
                 android:progress="5"
-                android:secondaryProgress="2">
+                android:secondaryProgress="2"
+                android:visibility="invisible">
         </ProgressBar>
         </LinearLayout>
 
         <FrameLayout
-            android:layout_width="112dp"
-            android:layout_height="112dp">
+            android:layout_width="122dp"
+            android:layout_height="122dp"
+            android:layout_marginRight="10dp">
 
-            <ImageView
+            <ru.tsarcom.vs.uselfie.CircularImageViewRed
                 android:id="@+id/ivRight"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="3px"
                 android:src="@drawable/abc_ic_clear_mtrl_alpha"
-                android:layout_margin="1dp"
-                android:background="@drawable/image_border_red"
-                android:padding="3dp">
-            </ImageView>
+                />
+            <TextView
+                android:id="@+id/tvVoiteRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="97"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:layout_gravity="left|top"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/image_tv_red"
+                android:textColor="#ffffffff">
+            </TextView>
         </FrameLayout>
 
     </LinearLayout>

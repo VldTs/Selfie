@@ -5,9 +5,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:paddingBottom="0dp"
-    tools:context="ru.tsarcom.selfie.LoginActivity"
-    android:background="@drawable/wp_1">
+    android:paddingBottom="0dp">
 
 
     <LinearLayout
@@ -19,14 +17,14 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="0dp">
+            android:padding="2dp">
 
 
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ЛИЧНЫЕ"
+                android:text="МОИ"
                 android:id="@+id/btnMine"
                 android:layout_weight="1"
                 android:background="@drawable/button_background2"
@@ -34,6 +32,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold|italic"
                 android:textColor="@color/text_color2"
+                android:padding="3dp"
                 />
 
             <Button
@@ -47,6 +46,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold|italic"
                 android:textColor="@color/text_color2"
+                android:padding="3dp"
                 />
 
         </LinearLayout>

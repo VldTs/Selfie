@@ -5,8 +5,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:paddingBottom="0dp"
-    android:background="@drawable/wp_1">
+    android:paddingBottom="0dp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -140,7 +139,7 @@
                         <Button
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="НРАВИТЬСЯ"
+                            android:text="НРАВИТСЯ"
                             android:id="@+id/btnVoiteLeft"
                             android:background="@drawable/button_background_blue"
                             android:gravity="center_horizontal|center_vertical"
@@ -193,7 +192,7 @@
                         <Button
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="НРАВИТЬСЯ"
+                            android:text="НРАВИТСЯ"
                             android:id="@+id/btnVoiteRight"
                             android:background="@drawable/button_background_red"
                             android:gravity="center_horizontal|center_vertical"
