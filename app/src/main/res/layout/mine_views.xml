@@ -88,11 +88,11 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:id="@+id/btnCreate2"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="30dp"
+        android:layout_margin="9dp"
         android:layout_alignParentEnd="false"
         android:layout_alignParentStart="false"
         android:layout_alignParentBottom="true"
@@ -101,7 +101,7 @@
         android:gravity="center"
         android:textColor="#ffffff"
         android:textStyle="bold"
-        android:background="@drawable/shema" />
+        android:background="@drawable/klyaksacreate" />
     <!--<ru.tsarcom.vs.uselfie.CircularButton-->
         <!--android:layout_width="95dp"-->
         <!--android:layout_height="95dp"-->

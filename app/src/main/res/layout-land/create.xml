@@ -69,7 +69,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:id="@+id/ivLeft"
-                            android:src="@drawable/plus_left"
+                            android:background="@drawable/klyaksablue"
                             android:layout_gravity="center"
                             android:layout_weight="1"/>
 
@@ -102,7 +102,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:id="@+id/ivRight"
-                            android:src="@drawable/plus_right"
+                            android:background="@drawable/klyaksared"
                             android:layout_gravity="center"
                             android:layout_weight="1" />
 

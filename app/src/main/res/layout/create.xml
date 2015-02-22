@@ -28,7 +28,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_background2"
                 android:gravity="center_horizontal|center_vertical"
-                android:textSize="18sp"
+                android:textSize="18dp"
                 android:textStyle="bold|italic"
                 android:textColor="@color/text_color2"
                 />
@@ -49,7 +49,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_background2"
                 android:gravity="center_horizontal|center_vertical"
-                android:textSize="18sp"
+                android:textSize="18dp"
                 android:textStyle="bold|italic"
                 android:textColor="@color/text_color2"
                 />
@@ -63,7 +63,7 @@
             android:id="@+id/btnShare"
             android:background="@drawable/button_background2"
             android:gravity="center_horizontal|center_vertical"
-            android:textSize="18sp"
+            android:textSize="18dp"
             android:textStyle="bold|italic"
             android:textColor="@color/text_color2"
             android:padding="3dp"
@@ -88,7 +88,7 @@
                         android:layout_width="380dp"
                         android:layout_height="380dp"
                         android:id="@+id/ivLeft"
-                        android:src="@drawable/plus_left"
+                        android:background="@drawable/klyaksablue"
                         android:layout_gravity="center" />
 
 
@@ -99,7 +99,7 @@
                         android:id="@+id/btnCameraLeft"
                         android:background="@drawable/button_background2"
                         android:gravity="center_horizontal|center_vertical"
-                        android:textSize="18sp"
+                        android:textSize="18dp"
                         android:textStyle="bold|italic"
                         android:textColor="@color/text_color2"
                         android:onClick="onClickCameraLeft"
@@ -116,7 +116,7 @@
                         android:layout_width="380dp"
                         android:layout_height="380dp"
                         android:id="@+id/ivRight"
-                        android:src="@drawable/plus_right"
+                        android:background="@drawable/klyaksared"
                         android:layout_gravity="center" />
 
                     <Button
@@ -126,7 +126,7 @@
                         android:id="@+id/btnCameraRight"
                         android:background="@drawable/button_background2"
                         android:gravity="center_horizontal|center_vertical"
-                        android:textSize="18sp"
+                        android:textSize="18dp"
                         android:textStyle="bold|italic"
                         android:textColor="@color/text_color2"
                         android:onClick="onClickCameraRight"

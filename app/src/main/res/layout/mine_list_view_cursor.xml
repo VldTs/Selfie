@@ -8,6 +8,8 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:id="@+id/flLVCBase"
+
         android:layout_height="wrap_content">
 
         <FrameLayout
@@ -39,6 +41,14 @@
                 android:layout_marginTop="2dp"
                 android:textColor="#ffffffff">
             </TextView>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/ivStartLeft"
+                android:layout_gravity="left|top"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="3dp" />
         </FrameLayout>
 
         <LinearLayout
@@ -56,15 +66,14 @@
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:gravity="center">
-            <TextView
-                android:id="@+id/tvCid0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="# "
-                android:layout_gravity="center"
-                android:textStyle="bold"
-                android:textSize="18dp">
-            </TextView>
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginRight="5px"
+                    android:id="@+id/ivHashtag"
+                    android:layout_gravity="center"
+                    android:src="@drawable/hashtag_cl50_1" />
             <TextView
                 android:id="@+id/tvCid"
                 android:layout_width="wrap_content"
@@ -75,13 +84,6 @@
                 android:textSize="15dp">
         </TextView>
             </LinearLayout>
-            <TextView
-                android:id="@+id/tvCdate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="2014-11-25"
-                android:textSize="9dp"></TextView>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -89,16 +91,29 @@
                 android:layout_height="fill_parent"
                 android:gravity="center_horizontal">
 
-                <TextView
-                    android:id="@+id/tvText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/ivVS"
                     android:layout_gravity="center"
-                    android:text=" VS. "
-                    android:textSize="24dp"
-                    android:textStyle="bold">
-                </TextView>
+                    android:src="@drawable/vs_black"
+                    android:visibility="visible" />
             </LinearLayout>
+            <TextView
+                android:id="@+id/tvCdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="2014-11-25"
+                android:textSize="9dp"></TextView>
+            <TextView
+                android:id="@+id/tvCstatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text=""
+                android:textSize="9dp"
+                android:layout_marginTop="4dp"></TextView>
 
             <ProgressBar
             android:id="@+id/pbLoad"
@@ -110,7 +125,7 @@
                 android:max="5"
                 android:progress="5"
                 android:secondaryProgress="2"
-                android:visibility="invisible">
+                android:visibility="gone">
         </ProgressBar>
         </LinearLayout>
 
@@ -138,6 +153,14 @@
                 android:background="@drawable/image_tv_red"
                 android:textColor="#ffffffff">
             </TextView>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/ivStartRight"
+                android:layout_gravity="right|top"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="3dp" />
         </FrameLayout>
 
     </LinearLayout>

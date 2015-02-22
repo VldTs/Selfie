@@ -83,7 +83,6 @@ public class CircularImageViewBlue extends ImageView {
             float sy = canvas.getHeight() / (float) height;
             Bitmap dstBmp;
             if (image.getWidth() >= image.getHeight()) {
-
                 m.setScale(sy, sy);
                 dstBmp = Bitmap.createBitmap(
                         image,
