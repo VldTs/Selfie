@@ -24,4 +24,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.2'
     compile files('libs/picasso-2.5.0.jar')
+    compile files('libs/imgscalr-lib-4.2.jar')
+    compile files('libs/imgscalr-lib-4.2-sources.jar')
+    compile files('libs/retrofit-1.9.0.jar')
 }

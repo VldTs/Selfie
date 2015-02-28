@@ -1,0 +1,141 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    tools:context="ru.tsarcom.vs.uselfie.Create2Activity">
+>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ЛИЧНЫЕ"
+                    android:id="@+id/btnMine"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_background2"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textSize="18dp"
+                    android:textStyle="bold|italic"
+                    android:textColor="@color/text_color2"
+                    />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SHARE"
+                    android:id="@+id/btnShare"
+                    android:background="@drawable/button_background2"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textSize="18dp"
+                    android:textStyle="bold|italic"
+                    android:textColor="@color/text_color2"
+                    android:padding="3dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ДРУГИЕ"
+                    android:id="@+id/btnOthers"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_background2"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textSize="18dp"
+                    android:textStyle="bold|italic"
+                    android:textColor="@color/text_color2"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/llBase">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical|center_horizontal">
+
+                    <ru.tsarcom.vs.uselfie.CircularImageCreateRed
+                        android:id="@+id/ivTop"
+                        android:background="@drawable/klyaksablue"
+
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:onClick="onclick"
+                        android:layout_marginLeft="3dp"
+                        android:layout_gravity="center" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/ivTop"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_marginLeft="3px"-->
+                        <!--android:onClick="onclick"-->
+                        <!--android:background="@drawable/klyaksablue"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--/>-->
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_weight="1">
+
+                    <ru.tsarcom.vs.uselfie.CircularImageCreateRed
+                        android:id="@+id/ivBotton"
+                        android:background="@drawable/klyaksared"
+
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:onClick="onclick"
+                        android:layout_marginLeft="3dp"
+                        android:layout_gravity="center" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="fill_parent"-->
+                        <!--android:layout_height="fill_parent"-->
+                        <!--android:background="@drawable/klyaksared"-->
+                        <!--android:id="@+id/ivBotton"-->
+                        <!--android:onClick="onclick"-->
+                        <!--android:layout_gravity="center" />-->
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="999"
+        android:id="@+id/tvCreateID"
+        android:padding="2dp"
+        android:layout_marginTop="50dp"
+        android:textSize="8dp" />
+
+</RelativeLayout>
+

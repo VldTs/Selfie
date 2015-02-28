@@ -21,11 +21,8 @@
             <ru.tsarcom.vs.uselfie.CircularImageViewBlue
                 android:id="@+id/ivLeft"
                 android:src="@drawable/abc_ic_clear_mtrl_alpha"
-
-
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-
                 android:layout_marginLeft="3dp"
             />
 

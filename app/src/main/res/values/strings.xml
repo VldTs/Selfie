@@ -4,5 +4,6 @@
     <string name="app_name">USelfie</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_create2">Create2Activity</string>
 
 </resources>
