@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -29,6 +30,10 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -44,11 +49,17 @@ import java.net.URL;
 
 public class Create2Activity extends Activity {
 
+    String strError;
+    JSONObject jObj = null;
+    JSONArray jaAccount = null;
+    JSONArray jaError = null;
+    JSONArray jaCompare = null;
     final String TAG = "logCreate2Activity";
     ImageView ivTop, ivBotton;
     int serverResponseCode = 0;
     String upLoadServerUri = null;
 
+    Intent intent;
     ProgressDialog dialog = null;
     String id_account;
     String id_compare;
@@ -61,6 +72,8 @@ public class Create2Activity extends Activity {
     TextView tvCount;
     AlertDialog.Builder adb;
     String imageLR;
+    DB_MineCompare db_MC;
+    int id_compare_int;
     String data[] = { "camera", "gallery" };
     Uri selectedImageUriCamera;
     private String selectedImagePath;
@@ -78,6 +91,11 @@ public class Create2Activity extends Activity {
         Intent intent = getIntent();
         id_account = intent.getStringExtra("id_account");
         id_compare = intent.getStringExtra("id_compare");
+        try {
+            id_compare_int = Integer.parseInt(id_compare);
+        } catch(NumberFormatException nfe) {
+            System.out.println("Could not parse " + id_compare);
+        }
         activity = this;
 
         llBase = (LinearLayout) findViewById(R.id.llBase);
@@ -102,15 +120,33 @@ public class Create2Activity extends Activity {
         switch (v.getId()) {
             case R.id.ivTop:
                 img = ivTop;
+                imageLR = "Left";
 //                REQUEST_CODE_PHOTO = 111;
                 showDialog(DIALOG_IMAGE);
                 break;
             case R.id.ivBotton:
                 img = ivBotton;
+                imageLR = "Right";
 //                REQUEST_CODE_PHOTO = 222;
                 showDialog(DIALOG_IMAGE);
                 break;
-            default:
+            case R.id.btnMine:
+                // кнопка
+                intent = new Intent(this, MineViewsActivity.class);
+                intent.putExtra("id_account", id_account);
+                startActivity(intent);
+                break;
+            case R.id.btnOthers:
+                // кнопка
+                intent = new Intent(this, OthersViewsActivity.class);
+                intent.putExtra("id_account", id_account);
+                startActivity(intent);
+                break;
+            case R.id.btnShare:
+                // кнопка
+                String url0;
+                url0 = "http://95.78.234.20:81/atest/jsonShareCompare.php?id_compare="+id_compare;
+                new ShareHttpAsyncTask().execute(url0);
                 break;
         }
     }
@@ -124,7 +160,7 @@ public class Create2Activity extends Activity {
     }
     public void onFromGallery(View v) {
 
-        Toast.makeText(getBaseContext(), "onFromGallery", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getBaseContext(), "onFromGallery", Toast.LENGTH_LONG).show();
 
         Intent i = new Intent(
                 Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -153,7 +189,7 @@ public class Create2Activity extends Activity {
         public void onClick(DialogInterface dialog, int which) {
             // выводим в лог позицию нажатого элемента
 //            Log.d(LOG_TAG, "which = " + which);
-            Toast.makeText(getBaseContext(), "cliiiik" + which, Toast.LENGTH_LONG).show();
+//            Toast.makeText(getBaseContext(), "cliiiik" + which, Toast.LENGTH_LONG).show();
         }
     };
 
@@ -190,19 +226,19 @@ public class Create2Activity extends Activity {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             Picasso.with(activity)
-//                .load("http://www.bankoboev.ru/images/NTA1NzUw/Bankoboev.Ru_aplle_protiv_android.jpg")
                                     .load("file:///"+selectedImagePath)
-//        .placeholder(R.drawable.ic_launcher)
-                                    .resize(1024,0)
+                                    .resize(1024, 0)
                                     .into(img);
+                        }
+                    });
+                    runOnUiThread(new Runnable() {
+                        public void run() {
                             Picasso.with(activity)
                                     .load("file:///" + selectedImagePath)
-//                                    .load("http://95.78.234.20:81/atest/uploads/5/189/175/img.jpg")
-                                    .resize(1024, 800)
-//        .placeholder(R.drawable.ic_launcher)
+                                    .resize(1024, 0)
                                     .into(target);
-                            Toast.makeText(activity, "savedImagePath = "+savedImagePath,
-                                    Toast.LENGTH_LONG).show();
+//                            Toast.makeText(activity, "savedImagePath = "+savedImagePath,
+//                                    Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -217,26 +253,20 @@ public class Create2Activity extends Activity {
                     selectedImageUriCamera = intent.getData();
                     imageLR = "Left";
                     selectedImagePath = getPath(selectedImageUriCamera);
-//                    setImageForMIPic();
-
-
-
 
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(activity, "selectedImagePathS = "+selectedImagePath,
-                                    Toast.LENGTH_LONG).show();
                             Picasso.with(activity)
                                     .load("file:///" + selectedImagePath)
-//                                    .load("http://95.78.234.20:81/atest/uploads/5/189/175/img.jpg")
-                                    .resize(1024, 800)
-//        .placeholder(R.drawable.ic_launcher)
+                                    .resize(1024, 0)
                                     .into(img);
+                        }
+                    });
+                    runOnUiThread(new Runnable() {
+                        public void run() {
                             Picasso.with(activity)
                             .load("file:///" + selectedImagePath)
-//                                    .load("http://95.78.234.20:81/atest/uploads/5/189/175/img.jpg")
-                                    .resize(1024, 800)
-//        .placeholder(R.drawable.ic_launcher)
+                                    .resize(1024, 0)
                                     .into(target);
                         }
                     });
@@ -257,31 +287,24 @@ public class Create2Activity extends Activity {
                 @Override
                 public void run() {
 
-//                    File file = new File(
-//                            Environment.getExternalStorageDirectory().getPath()
-//                                    + "/saved.jpg");
                     savedImagePath = android.os.Environment.getExternalStorageDirectory()
                             + "/saved.jpg";
                     File file = new File(savedImagePath );
                     try {
                         file.createNewFile();
                         FileOutputStream ostream = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG,80,ostream);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
                         ostream.close();
 
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 setImageForMIPic();
 
-                                Toast.makeText(activity, "savedImagePath = "+savedImagePath,
-                                        Toast.LENGTH_LONG).show();
                             }
                         });
-//                        Toast.makeText(getBaseContext(), "save", Toast.LENGTH_LONG).show();
                     }
                     catch (Exception e) {
                         e.printStackTrace();
-//                        Toast.makeText(getBaseContext(), "error try", Toast.LENGTH_LONG).show();
                     }
                 }
             }).start();
@@ -346,7 +369,7 @@ public class Create2Activity extends Activity {
 //                        messageText.setText("Загрузка начата.....");
                     }
                 });
-                uploadFile(savedImagePath,0, imageLR);
+                uploadFile(savedImagePath, 0, imageLR);
 //                uploadFile(savedImagePath,imageOrient, imageLR);
             }
         }).start();
@@ -367,28 +390,21 @@ public class Create2Activity extends Activity {
         File sourceFile = new File(sourceFileUri);
 
         if (!sourceFile.isFile()) {
-
             dialog.dismiss();
-
             runOnUiThread(new Runnable() {
                 public void run() {
                     Toast.makeText(Create2Activity.this, "Такого файла для Selfie не существует",
                             Toast.LENGTH_SHORT).show();
-
                 }
             });
-
             return 0;
-
         }
         else
         {
             try {
-
                 // open a URL connection to the Servlet
                 FileInputStream fileInputStream = new FileInputStream(sourceFile);
                 URL url = new URL(upLoadServerUri+"&imageLR="+imageLR+"&imageOrientation="+imageOrientation);
-
                 // Open a HTTP  connection to  the URL
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setDoInput(true); // Allow Inputs
@@ -460,64 +476,64 @@ public class Create2Activity extends Activity {
 
                 final String serverContent;
                 serverContent = jsonReply;
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(Create2Activity.this,"serverContent-" + serverContent + "-",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        Toast.makeText(Create2Activity.this,"serverContent-" + serverContent + "-",
+//                                Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
                 if(serverResponseCode == 200){
 
                     runOnUiThread(new Runnable() {
                         public void run() {
 
-                            Toast.makeText(Create2Activity.this,"-" + serverResponseMessage + "-готово",
-                                    Toast.LENGTH_SHORT).show();
-//                            try {
-//                                JSONObject jCCObj = null;
-//                                JSONArray jaCCError = null;
-//                                JSONArray jaCPhoto = null;
-//                                String strCCError;
-//                                jCCObj = new JSONObject(serverContent);
-//                                // Getting JSON Array
-//                                jaCCError = jCCObj.getJSONArray("error");
-//                                JSONObject joCCError = jaCCError.getJSONObject(0);
-//                                strCCError = joCCError.getString("status");
-//                                if (strCCError.equals("none")) {
-//                                    jaCPhoto = jCCObj.getJSONArray("photo");
-//                                    JSONObject joCCompare = jaCPhoto.getJSONObject(0);
-//                                    int id_photo = joCCompare.getInt("id");
-//                                    int Orientation = joCCompare.getInt("Orientation");
-//                                    String LeftOrRight = joCCompare.getString("LeftOrRight");
-//
-//                                    if (LeftOrRight.equals("Left")) {
-////        // открываем подключение к БД
-//                                        db_MC = new DB_MineCompare(activity);
-//                                        db_MC.open();
-//                                        db_MC.updateLeftMC(id_compare_int, 0,
-//                                                id_photo,  Orientation, "uploads/"+id_account+"/"+id_compare+"/"+id_photo+"/img.jpg", 0);
-//                                        db_MC.close();
-//
-//                                    }
-//                                    if (LeftOrRight.equals("Right")) {
-////        // открываем подключение к БД
-//                                        db_MC = new DB_MineCompare(activity);
-//                                        db_MC.open();
-//                                        db_MC.updateRightMC(id_compare_int, 0,
-//                                                id_photo,  Orientation, "uploads/"+id_account+"/"+id_compare+"/"+id_photo+"/img.jpg", 0);
-//                                        db_MC.close();
-//
-//                                    }
-//
+//                            Toast.makeText(Create2Activity.this,"-" + serverResponseMessage + "-готово",
+//                                    Toast.LENGTH_SHORT).show();
+                            try {
+                                JSONObject jCCObj = null;
+                                JSONArray jaCCError = null;
+                                JSONArray jaCPhoto = null;
+                                String strCCError;
+                                jCCObj = new JSONObject(serverContent);
+                                // Getting JSON Array
+                                jaCCError = jCCObj.getJSONArray("error");
+                                JSONObject joCCError = jaCCError.getJSONObject(0);
+                                strCCError = joCCError.getString("status");
+                                if (strCCError.equals("none")) {
+                                    jaCPhoto = jCCObj.getJSONArray("photo");
+                                    JSONObject joCCompare = jaCPhoto.getJSONObject(0);
+                                    int id_photo = joCCompare.getInt("id");
+                                    int Orientation = joCCompare.getInt("Orientation");
+                                    String LeftOrRight = joCCompare.getString("LeftOrRight");
+
+                                    if (LeftOrRight.equals("Left")) {
+//        // открываем подключение к БД
+                                        db_MC = new DB_MineCompare(activity);
+                                        db_MC.open();
+                                        db_MC.updateLeftMC(id_compare_int, 0,
+                                                id_photo,  Orientation, "uploads/"+id_account+"/"+id_compare+"/"+id_photo+"/img.jpg", 0);
+                                        db_MC.close();
+
+                                    }
+                                    if (LeftOrRight.equals("Right")) {
+//        // открываем подключение к БД
+                                        db_MC = new DB_MineCompare(activity);
+                                        db_MC.open();
+                                        db_MC.updateRightMC(id_compare_int, 0,
+                                                id_photo,  Orientation, "uploads/"+id_account+"/"+id_compare+"/"+id_photo+"/img.jpg", 0);
+                                        db_MC.close();
+
+                                    }
+
 //                                    Toast.makeText(Create2Activity.this,"-" + serverResponseMessage + "- Ваша Selfie загружена",
 //                                            Toast.LENGTH_SHORT).show();
-//                                }else{
-//                                    Toast.makeText(Create2Activity.this,"-" + serverResponseMessage + "- Ошибки при изменении данных загружки",
-//                                            Toast.LENGTH_SHORT).show();  }
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
+                                }else{
+                                    Toast.makeText(Create2Activity.this,"-" + serverResponseMessage + "- Ошибки при изменении данных загружки",
+                                            Toast.LENGTH_SHORT).show();  }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                 }
@@ -560,5 +576,37 @@ public class Create2Activity extends Activity {
             return serverResponseCode;
 
         } // End else block
+    }
+
+    private class ShareHttpAsyncTask extends AsyncTask<String, Void, String> {
+        public String JsonString_t;
+        @Override
+        protected String doInBackground(String... urls) {
+            GetFromURL oGetURL = new GetFromURL();
+            return oGetURL.GET(urls[0]);
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            //   Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
+            try {
+                jObj = new JSONObject(result);
+                // Getting JSON Array
+                jaError = jObj.getJSONArray("error");
+                JSONObject joError = jaError.getJSONObject(0);
+                strError = joError.getString("status");
+                if (strError.equals("share")) {
+                    Toast.makeText(getBaseContext(), "Опубликовано", Toast.LENGTH_LONG).show();
+
+                    intent = new Intent(activity, MineViewsActivity.class);
+                    intent.putExtra("id_account", id_account);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getBaseContext(), "!!!!error", Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

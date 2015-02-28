@@ -6,8 +6,10 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
-    tools:context="ru.tsarcom.vs.uselfie.Create2Activity">
->
+    tools:context="ru.tsarcom.vs.uselfie.Create2Activity"
+    android:background="@drawable/wallpaper3"
+    >
+
 
         <LinearLayout
             android:orientation="vertical"
@@ -31,6 +33,7 @@
                     android:background="@drawable/button_background2"
                     android:gravity="center_horizontal|center_vertical"
                     android:textSize="18dp"
+                    android:onClick="onclick"
                     android:textStyle="bold|italic"
                     android:textColor="@color/text_color2"
                     />
@@ -39,6 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SHARE"
+                    android:onClick="onclick"
                     android:id="@+id/btnShare"
                     android:background="@drawable/button_background2"
                     android:gravity="center_horizontal|center_vertical"
@@ -53,6 +57,7 @@
                     android:text="ДРУГИЕ"
                     android:id="@+id/btnOthers"
                     android:layout_weight="1"
+                    android:onClick="onclick"
                     android:background="@drawable/button_background2"
                     android:gravity="center_horizontal|center_vertical"
                     android:textSize="18dp"
@@ -78,7 +83,7 @@
 
                     <ru.tsarcom.vs.uselfie.CircularImageCreateRed
                         android:id="@+id/ivTop"
-                        android:background="@drawable/klyaksablue"
+                        android:background="@drawable/plus_slctr"
 
                         android:layout_width="250dp"
                         android:layout_height="250dp"
@@ -107,7 +112,7 @@
 
                     <ru.tsarcom.vs.uselfie.CircularImageCreateRed
                         android:id="@+id/ivBotton"
-                        android:background="@drawable/klyaksared"
+                        android:background="@drawable/plus_slctr"
 
                         android:layout_width="250dp"
                         android:layout_height="250dp"
