@@ -50,15 +50,20 @@ import java.net.URL;
 public class Create2Activity extends Activity {
 
     String strError;
+    String strCCError;
     JSONObject jObj = null;
+    JSONObject jCCObj = null;
     JSONArray jaAccount = null;
     JSONArray jaError = null;
+    JSONArray jaCCError = null;
     JSONArray jaCompare = null;
+    JSONArray jaPhoto = null;
+    JSONArray jaCCompare = null;
     final String TAG = "logCreate2Activity";
     ImageView ivTop, ivBotton;
     int serverResponseCode = 0;
     String upLoadServerUri = null;
-
+    int CountSelfie =0;
     Intent intent;
     ProgressDialog dialog = null;
     String id_account;
@@ -114,6 +119,8 @@ public class Create2Activity extends Activity {
         TextView tvCreateID = (TextView)findViewById(R.id.tvCreateID);
         tvCreateID.setText(id_compare);
 
+        db_MC = new DB_MineCompare(activity);
+        db_MC.open();
     }
 
     public void onclick(View v) {
@@ -133,24 +140,53 @@ public class Create2Activity extends Activity {
             case R.id.btnMine:
                 // кнопка
                 intent = new Intent(this, MineViewsActivity.class);
-                intent.putExtra("id_account", id_account);
-                startActivity(intent);
+                if (CountSelfie<2){
+                    String urlCC = "http://95.78.234.20:81/atest/jsonDeleteCompare.php?id_compare="+id_compare+"&id_account="+id_account;
+                    new DeleteCompareHttpAsyncTask().execute(urlCC);
+                }else{
+                    String url0;
+                    url0 = "http://95.78.234.20:81/atest/jsonNoShareCompare.php?id_compare="+id_compare;
+                    new ShareHttpAsyncTask().execute(url0);
+                }
                 break;
             case R.id.btnOthers:
                 // кнопка
                 intent = new Intent(this, OthersViewsActivity.class);
-                intent.putExtra("id_account", id_account);
-                startActivity(intent);
+                if (CountSelfie<2){
+                    String urlCC = "http://95.78.234.20:81/atest/jsonDeleteCompare.php?id_compare="+id_compare+"&id_account="+id_account;
+                    new DeleteCompareHttpAsyncTask().execute(urlCC);
+                }else{
+                    String url0;
+                    url0 = "http://95.78.234.20:81/atest/jsonNoShareCompare.php?id_compare="+id_compare;
+                    new ShareHttpAsyncTask().execute(url0);
+                }
                 break;
             case R.id.btnShare:
                 // кнопка
-                String url0;
-                url0 = "http://95.78.234.20:81/atest/jsonShareCompare.php?id_compare="+id_compare;
-                new ShareHttpAsyncTask().execute(url0);
+//                Toast.makeText(this, "btnShare CountSelfie" + CountSelfie, Toast.LENGTH_LONG).show();
+                intent = new Intent(activity, MineViewsActivity.class);
+                if (CountSelfie<2){
+                    String urlCC = "http://95.78.234.20:81/atest/jsonDeleteCompare.php?id_compare="+id_compare+"&id_account="+id_account;
+                    new DeleteCompareHttpAsyncTask().execute(urlCC);
+                }else{
+                    String url0;
+                    url0 = "http://95.78.234.20:81/atest/jsonShareCompare.php?id_compare="+id_compare;
+                    new ShareHttpAsyncTask().execute(url0);
+                }
                 break;
         }
     }
-
+    public void onBackPressed() {
+        intent = new Intent(activity, MineViewsActivity.class);
+        if (CountSelfie<2){
+            String urlCC = "http://95.78.234.20:81/atest/jsonDeleteCompare.php?id_compare="+id_compare+"&id_account="+id_account;
+            new DeleteCompareHttpAsyncTask().execute(urlCC);
+        }else{
+            String url0;
+            url0 = "http://95.78.234.20:81/atest/jsonNoShareCompare.php?id_compare="+id_compare;
+            new ShareHttpAsyncTask().execute(url0);
+        }
+    }
     public void onFromCamera(View v) {
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -251,7 +287,7 @@ public class Create2Activity extends Activity {
                     Log.d(TAG, "Intent is null");
                 } else {
                     selectedImageUriCamera = intent.getData();
-                    imageLR = "Left";
+//                    imageLR = "Left";
                     selectedImagePath = getPath(selectedImageUriCamera);
 
                     runOnUiThread(new Runnable() {
@@ -509,20 +545,16 @@ public class Create2Activity extends Activity {
 
                                     if (LeftOrRight.equals("Left")) {
 //        // открываем подключение к БД
-                                        db_MC = new DB_MineCompare(activity);
-                                        db_MC.open();
                                         db_MC.updateLeftMC(id_compare_int, 0,
                                                 id_photo,  Orientation, "uploads/"+id_account+"/"+id_compare+"/"+id_photo+"/img.jpg", 0);
-                                        db_MC.close();
+                                        CountSelfie ++;
 
                                     }
                                     if (LeftOrRight.equals("Right")) {
 //        // открываем подключение к БД
-                                        db_MC = new DB_MineCompare(activity);
-                                        db_MC.open();
                                         db_MC.updateRightMC(id_compare_int, 0,
                                                 id_photo,  Orientation, "uploads/"+id_account+"/"+id_compare+"/"+id_photo+"/img.jpg", 0);
-                                        db_MC.close();
+                                        CountSelfie ++;
 
                                     }
 
@@ -596,17 +628,69 @@ public class Create2Activity extends Activity {
                 JSONObject joError = jaError.getJSONObject(0);
                 strError = joError.getString("status");
                 if (strError.equals("share")) {
+                    db_MC.updateMCStatus(id_compare_int,0);
                     Toast.makeText(getBaseContext(), "Опубликовано", Toast.LENGTH_LONG).show();
+                }else{
+                    if (strError.equals("no share")) {
+                        db_MC.updateMCStatus(id_compare_int,1);
+                        Toast.makeText(getBaseContext(), "Не опубликовано", Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getBaseContext(), "!!!!error", Toast.LENGTH_LONG).show();
+                    }
+                }
+                intent.putExtra("id_account", id_account);
+                startActivity(intent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    protected void onDestroy() {
+        super.onDestroy();
+        // закрываем подключение при выходе
+        db_MC.close();
+    }
 
-                    intent = new Intent(activity, MineViewsActivity.class);
+    //---- Delete
+    private class DeleteCompareHttpAsyncTask extends AsyncTask<String, Void, String> {
+        public String JsonString_t;
+        @Override
+        protected String doInBackground(String... urls) {
+            GetFromURL oGetURL = new GetFromURL();
+            return oGetURL.GET(urls[0]);
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+//            Toast.makeText(getBaseContext(), "Received!  "+result, Toast.LENGTH_LONG).show();
+            try {
+                jCCObj = new JSONObject(result);
+                // Getting JSON Array
+                jaCCError = jCCObj.getJSONArray("error");
+                JSONObject joCCError = jaCCError.getJSONObject(0);
+                strCCError = joCCError.getString("status");
+                if (strCCError.equals("none")) {
+//                    new Thread(new Runnable() {
+//                        public void run() {
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+                                    db_MC.delRec(id_compare_int);
+
                     intent.putExtra("id_account", id_account);
                     startActivity(intent);
+//                                }
+//                            });
+//                        }
+//                    }).start();
+//                    Toast.makeText(getBaseContext(), "удалено ваше Selfie :(", Toast.LENGTH_LONG).show();
+
                 }else{
-                    Toast.makeText(getBaseContext(), "!!!!error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "простите, не вышло удалить Selfie :(", Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
     }
 }
